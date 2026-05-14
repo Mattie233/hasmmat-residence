@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Property {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  address     String?
+  city        String    @default("Leeds")
+  maxGuests   Int       @default(8)
+  bedrooms    Int       @default(4)
+  bathrooms   Int?
+  basePrice   Int
+  cleaningFee Int       @default(60)
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  propertyId    String
+  property      Property      @relation(fields: [propertyId], references: [id])
+  guestName     String
+  guestEmail    String
+  guestPhone    String?
+  checkIn       DateTime
+  checkOut      DateTime
+  guests        Int
+  nightlyRate   Int
+  cleaningFee   Int
+  extraGuestFee Int           @default(0)
+  totalPrice    Int
+  status        BookingStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(UNPAID)
+  stripeSessionId String?
+  createdAt     DateTime      @default(now())
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
+}
