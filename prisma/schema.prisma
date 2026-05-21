@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Property {
@@ -23,23 +22,23 @@ model Property {
 }
 
 model Booking {
-  id            String        @id @default(cuid())
-  propertyId    String
-  property      Property      @relation(fields: [propertyId], references: [id])
-  guestName     String
-  guestEmail    String
-  guestPhone    String?
-  checkIn       DateTime
-  checkOut      DateTime
-  guests        Int
-  nightlyRate   Int
-  cleaningFee   Int
-  extraGuestFee Int           @default(0)
-  totalPrice    Int
-  status        BookingStatus @default(PENDING)
-  paymentStatus PaymentStatus @default(UNPAID)
-  stripeSessionId String?
-  createdAt     DateTime      @default(now())
+  id               String        @id @default(cuid())
+  propertyId       String
+  property         Property      @relation(fields: [propertyId], references: [id])
+  guestName        String
+  guestEmail       String
+  guestPhone       String?
+  checkIn          DateTime
+  checkOut         DateTime
+  guests           Int
+  nightlyRate      Int
+  cleaningFee      Int
+  extraGuestFee    Int           @default(0)
+  totalPrice       Int
+  status           BookingStatus @default(PENDING)
+  paymentStatus    PaymentStatus @default(UNPAID)
+  stripeSessionId  String?
+  createdAt        DateTime      @default(now())
 }
 
 enum BookingStatus {

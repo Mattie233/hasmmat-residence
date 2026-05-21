@@ -30,34 +30,14 @@ export function BookingSection() {
     bookingType,
   });
 
-  const handleCheckout = async () => {
+  const handleBookingRequest = () => {
     if (!checkIn || !checkOut || nights < 1 || !pricing?.valid) {
       setStatus('Select valid dates and guest count.');
       return;
     }
 
-    setStatus('Preparing checkout...');
-
-    const response = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        checkIn,
-        checkOut,
-        guests,
-        bookingType,
-        pricing,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.url) {
-      window.location.href = data.url;
-      return;
-    }
-
-    setStatus(data.error || 'Unable to start checkout. Please try again.');
+    setStatus('Send your dates through the contact form and we will confirm the deposit and bank transfer details.');
+    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const bestValueLabel = bookingType === 'nonrefundable' ? 'Best value for savings' : 'Flexible booking';
@@ -102,18 +82,33 @@ export function BookingSection() {
             </div>
             <div>
               <label className="mb-3 block text-sm uppercase tracking-[0.2em] text-brand-300">Guests</label>
-              <input
-                type="range"
-                min={MIN_GUESTS}
-                max={MAX_GUESTS}
-                value={guests}
-                onChange={(e) => setGuests(Number(e.target.value))}
-                className="w-full"
-              />
-              <div className="mt-2 flex items-center justify-between text-brand-100">
-                <span>{guests} Guest{guests !== 1 ? 's' : ''}</span>
-                <span>Extra fee applies after 4 guests</span>
+              <div className="flex items-center justify-between rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-white">
+                <button
+                  type="button"
+                  onClick={() => setGuests((current) => Math.max(MIN_GUESTS, current - 1))}
+                  disabled={guests <= MIN_GUESTS}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-xl leading-none text-brand-100 transition hover:border-brand-300 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                  aria-label="Decrease guests"
+                >
+                  -
+                </button>
+                <div className="text-center">
+                  <p className="text-2xl font-semibold">{guests}</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-brand-300">
+                    Guest{guests !== 1 ? 's' : ''}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setGuests((current) => Math.min(MAX_GUESTS, current + 1))}
+                  disabled={guests >= MAX_GUESTS}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-xl leading-none text-brand-100 transition hover:border-brand-300 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                  aria-label="Increase guests"
+                >
+                  +
+                </button>
               </div>
+              <p className="mt-2 text-sm text-brand-300">Extra guest fee after 4 guests.</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <button
@@ -183,7 +178,7 @@ export function BookingSection() {
             <div className="rounded-[2rem] bg-brand-900/80 p-6 text-white">
               <div className="flex items-center justify-between text-sm uppercase tracking-[0.2em] text-brand-300">
                 <span>Total price</span>
-                <span>Includes estimate</span>
+                <span>Deposit by bank transfer</span>
               </div>
               <p className="mt-4 text-4xl font-semibold">
                 {loading ? 'Loading…' : `£${pricing?.totalAfterDiscount?.toFixed(0) ?? '0'}`}
@@ -195,13 +190,19 @@ export function BookingSection() {
             </div>
 
             <button
-              onClick={handleCheckout}
+              onClick={handleBookingRequest}
               disabled={!pricing?.valid || loading}
               className="w-full rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? 'Updating price…' : 'Proceed to Stripe Checkout'}
+              {loading ? 'Updating price…' : 'Send booking request'}
             </button>
-            <p className="text-center text-sm text-brand-200">Secure payment, instant confirmation, and responsive guest support.</p>
+            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 text-sm leading-6 text-brand-200">
+              <p className="font-semibold text-white">No online card payment is taken on this website.</p>
+              <p className="mt-2">
+                Once your stay is confirmed, we provide bank details for the deposit and remaining balance.
+                Use your name and stay dates as the payment reference.
+              </p>
+            </div>
             {pricing?.fallbackUsed ? (
               <p className="text-sm text-amber-200">Pricing is using temporarily cached fallback values.</p>
             ) : null}

@@ -19,10 +19,10 @@ Premium direct booking website for Hasmmat Residence, a luxury 4-bedroom service
 
 ## Deployment
 
-Deploy on Vercel using the `next` framework. Provide `STRIPE_SECRET_KEY` and `STRIPE_PUBLISHABLE_KEY` as environment variables.
+Deploy on Vercel using the `next` framework. Provide the PriceLabs and database environment variables required by the API routes.
 
 ## Notes
 
-- Uses Next.js App Router, Tailwind CSS, Framer Motion, and Stripe API.
+- Uses Next.js App Router, Tailwind CSS, Framer Motion, and PriceLabs pricing.
 - Placeholder images are remote assets from Unsplash.
-- Booking API route is ready for Stripe Checkout integration.
+- The website does not take online card payments. Guests send booking requests and receive bank transfer details for deposits and balances after confirmation.
