@@ -27,3 +27,4 @@ Deploy on Vercel using the `next` framework. Provide the PriceLabs and database 
 - Placeholder images are remote assets from Unsplash.
 - The website does not take online card payments. Guests send booking requests and receive bank transfer details for deposits and balances after confirmation.
 # hasmmat-residence
+# hasmmat-residence
