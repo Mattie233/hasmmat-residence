@@ -74,7 +74,7 @@ export function BookingSection() {
   const [activeDateField, setActiveDateField] = useState<DateField>('checkIn');
   const [visibleMonth, setVisibleMonth] = useState(() => startOfMonth(new Date()));
   const [guests, setGuests] = useState(2);
-  const [bookingType, setBookingType] = useState<BookingType>('flexible');
+  const bookingType: BookingType = 'flexible';
   const [status, setStatus] = useState<string | null>(null);
 
   const nights = useMemo(() => {
@@ -135,8 +135,6 @@ export function BookingSection() {
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const bestValueLabel = bookingType === 'nonrefundable' ? 'Best value for savings' : 'Flexible booking';
-
   return (
     <section id="booking" className="container py-24">
       <div className="mx-auto max-w-3xl text-center">
@@ -145,7 +143,7 @@ export function BookingSection() {
         </p>
         <h2 className="text-4xl font-semibold text-white">Secure your stay with flexible rates and transparent pricing</h2>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-brand-200">
-          Choose your dates, set guest numbers, and see the total instantly. Direct booking discounts, seasonal PriceLabs rates, and real-time comparison to Airbnb are built in.
+          Choose your dates, set guest numbers, and check live Smoobu availability before sending a direct booking request.
         </p>
       </div>
 
@@ -287,28 +285,6 @@ export function BookingSection() {
               </div>
               <p className="mt-2 text-sm text-brand-300">Extra guest fee after 4 guests.</p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <button
-                onClick={() => setBookingType('flexible')}
-                className={`rounded-3xl border px-4 py-3 text-sm font-semibold transition ${
-                  bookingType === 'flexible'
-                    ? 'border-brand-300 bg-brand-300/10 text-white'
-                    : 'border-white/10 bg-white/5 text-brand-100'
-                }`}
-              >
-                Flexible
-              </button>
-              <button
-                onClick={() => setBookingType('nonrefundable')}
-                className={`rounded-3xl border px-4 py-3 text-sm font-semibold transition ${
-                  bookingType === 'nonrefundable'
-                    ? 'border-brand-300 bg-brand-300/10 text-white'
-                    : 'border-white/10 bg-white/5 text-brand-100'
-                }`}
-              >
-                Non-refundable
-              </button>
-            </div>
           </div>
         </motion.div>
 
@@ -321,22 +297,20 @@ export function BookingSection() {
           <div className="space-y-6 text-brand-100">
             <div className="rounded-[2rem] bg-white/5 p-6">
               <div className="flex items-center justify-between text-sm uppercase tracking-[0.2em] text-brand-300">
-                <span>{bestValueLabel}</span>
+                <span>Live Smoobu check</span>
                 <span>{pricing?.savingsLabel ?? 'Real-time rate update'}</span>
               </div>
               <div className="mt-5 space-y-4 text-brand-200">
                 <div className="flex items-center justify-between">
-                  <span>Nightly rate total</span>
+                  <span>Smoobu stay price</span>
                   <span>£{pricing ? pricing.rateTotal : '--'}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span>Airbnb comparison</span>
-                  <span>£{pricing ? pricing.airbnbTotal : '--'}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Cleaning fee</span>
-                  <span>£{pricing ? pricing.cleaningFee : '60'}</span>
-                </div>
+                {pricing?.cleaningFee ? (
+                  <div className="flex items-center justify-between">
+                    <span>Cleaning fee</span>
+                    <span>£{pricing.cleaningFee}</span>
+                  </div>
+                ) : null}
                 {pricing?.extraGuestFeeTotal ? (
                   <div className="flex items-center justify-between text-emerald-300">
                     <span>Extra guest fee</span>
@@ -362,7 +336,7 @@ export function BookingSection() {
               </p>
               <p className="mt-3 text-sm leading-6 text-brand-200">
                 Booking for {guests} guest{guests !== 1 ? 's' : ''} across {nights || '0'} night{nights !== 1 ? 's' : ''}.{' '}
-                {bookingType === 'nonrefundable' ? 'Non-refundable savings applied.' : 'Flexible cancellation available.'}
+                Availability and price are checked against Smoobu before you send a request.
               </p>
             </div>
 

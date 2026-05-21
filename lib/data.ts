@@ -149,7 +149,7 @@ export const faqs = [
   },
   {
     question: 'What is your cancellation policy?',
-    answer: 'Choose flexible or non-refundable pricing during checkout. Direct bookers often save more.'
+    answer: 'Cancellation terms are confirmed with your booking request before any bank-transfer deposit is requested.'
   },
   {
     question: 'Do you offer long-stay discounts?',
@@ -157,6 +157,6 @@ export const faqs = [
   },
   {
     question: 'Is a deposit required?',
-    answer: 'A refundable security deposit is requested for bookings, shown clearly at checkout.'
+    answer: 'A refundable security deposit is requested for bookings and confirmed before bank-transfer details are sent.'
   }
 ];

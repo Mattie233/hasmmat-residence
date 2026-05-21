@@ -34,37 +34,31 @@ export type FAQItem = {
 
 export type BookingType = 'flexible' | 'nonrefundable';
 
-export type PriceLabsRawRate = {
-  date: string;
-  airbnb_rate?: number | null;
-  pricelabs_rate?: number | null;
-  rate?: number | null;
-  min_stay?: number | null;
-  available?: boolean | null;
+export type SmoobuAvailabilityRequest = {
+  arrivalDate: string;
+  departureDate: string;
+  apartments: number[];
+  customerId: number;
+  guests?: number;
 };
 
-export type PriceLabsApiResponse = {
-  listing_id: string;
-  currency: string;
-  rates: PriceLabsRawRate[];
-};
-
-export type NormalizedNightlyRate = {
-  date: string;
-  airbnbRate: number;
-  priceLabsRate: number;
-  minStay: number | null;
-  available: boolean;
-};
-
-export type PropertyPricingConfig = {
-  propertyId: string;
-  listingId: string;
-  name: string;
-  cleaningFee: number;
-  includedGuests: number;
-  extraGuestFee: number;
-  fallbackNightlyRate: number;
+export type SmoobuAvailabilityResponse = {
+  availableApartments?: number[];
+  prices?: Record<string, { price: number; currency: string }>;
+  errorMessages?: Record<
+    string,
+    {
+      errorCode?: number;
+      message?: string;
+      minimumLengthOfStay?: number;
+      numberOfGuest?: number;
+      leadTime?: number;
+      minimumLengthBetweenBookings?: number;
+      arrivalDays?: string[];
+    }
+  >;
+  title?: string;
+  detail?: string;
 };
 
 export interface PricingRequest {
