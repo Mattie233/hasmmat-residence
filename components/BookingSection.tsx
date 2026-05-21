@@ -7,10 +7,72 @@ import type { BookingType } from '@/types';
 
 const MIN_GUESTS = 1;
 const MAX_GUESTS = 8;
+const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+const monthFormatter = new Intl.DateTimeFormat('en-GB', {
+  month: 'long',
+  year: 'numeric',
+});
+
+const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+  weekday: 'short',
+  day: 'numeric',
+  month: 'short',
+});
+
+type DateField = 'checkIn' | 'checkOut';
+
+function toDateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function parseDateKey(value: string) {
+  if (!value) return null;
+  const [year, month, day] = value.split('-').map(Number);
+  if (!year || !month || !day) return null;
+  return new Date(year, month - 1, day);
+}
+
+function startOfMonth(date: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+function addMonths(date: Date, amount: number) {
+  return new Date(date.getFullYear(), date.getMonth() + amount, 1);
+}
+
+function getCalendarDays(month: Date) {
+  const monthStart = startOfMonth(month);
+  const mondayOffset = (monthStart.getDay() + 6) % 7;
+  const gridStart = new Date(monthStart);
+  gridStart.setDate(monthStart.getDate() - mondayOffset);
+
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(gridStart);
+    date.setDate(gridStart.getDate() + index);
+    return date;
+  });
+}
+
+function isBeforeToday(date: Date) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return date.getTime() < today.getTime();
+}
+
+function formatDisplayDate(value: string, fallback: string) {
+  const date = parseDateKey(value);
+  return date ? dateFormatter.format(date) : fallback;
+}
 
 export function BookingSection() {
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
+  const [activeDateField, setActiveDateField] = useState<DateField>('checkIn');
+  const [visibleMonth, setVisibleMonth] = useState(() => startOfMonth(new Date()));
   const [guests, setGuests] = useState(2);
   const [bookingType, setBookingType] = useState<BookingType>('flexible');
   const [status, setStatus] = useState<string | null>(null);
@@ -29,6 +91,39 @@ export function BookingSection() {
     guests,
     bookingType,
   });
+
+  const currentMonth = useMemo(() => startOfMonth(new Date()), []);
+  const calendarDays = useMemo(() => getCalendarDays(visibleMonth), [visibleMonth]);
+  const checkInDate = useMemo(() => parseDateKey(checkIn), [checkIn]);
+  const checkOutDate = useMemo(() => parseDateKey(checkOut), [checkOut]);
+  const canGoToPreviousMonth = visibleMonth.getTime() > currentMonth.getTime();
+
+  const handleDateSelect = (date: Date) => {
+    if (isBeforeToday(date)) return;
+
+    const selectedKey = toDateKey(date);
+
+    if (activeDateField === 'checkIn') {
+      setCheckIn(selectedKey);
+
+      if (checkOutDate && date.getTime() >= checkOutDate.getTime()) {
+        setCheckOut('');
+      }
+
+      setActiveDateField('checkOut');
+      return;
+    }
+
+    if (!checkInDate || date.getTime() <= checkInDate.getTime()) {
+      setCheckIn(selectedKey);
+      setCheckOut('');
+      setActiveDateField('checkOut');
+      return;
+    }
+
+    setCheckOut(selectedKey);
+    setActiveDateField('checkIn');
+  };
 
   const handleBookingRequest = () => {
     if (!checkIn || !checkOut || nights < 1 || !pricing?.valid) {
@@ -62,23 +157,105 @@ export function BookingSection() {
           className="rounded-[2rem] border border-white/10 bg-black/50 p-8 shadow-soft backdrop-blur-xl"
         >
           <div className="space-y-6">
-            <div>
-              <label className="mb-3 block text-sm uppercase tracking-[0.2em] text-brand-300">Check-in</label>
-              <input
-                type="date"
-                value={checkIn}
-                onChange={(e) => setCheckIn(e.target.value)}
-                className="w-full rounded-3xl border border-white/10 bg-white/5 px-5 py-4 text-white outline-none transition focus:border-brand-300"
-              />
-            </div>
-            <div>
-              <label className="mb-3 block text-sm uppercase tracking-[0.2em] text-brand-300">Check-out</label>
-              <input
-                type="date"
-                value={checkOut}
-                onChange={(e) => setCheckOut(e.target.value)}
-                className="w-full rounded-3xl border border-white/10 bg-white/5 px-5 py-4 text-white outline-none transition focus:border-brand-300"
-              />
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-4">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveDateField('checkIn')}
+                  className={`rounded-[1.5rem] border p-4 text-left transition ${
+                    activeDateField === 'checkIn'
+                      ? 'border-brand-300 bg-brand-300/10 text-white'
+                      : 'border-white/10 bg-black/20 text-brand-100 hover:border-white/20'
+                  }`}
+                >
+                  <span className="text-xs uppercase tracking-[0.2em] text-brand-300">Check-in</span>
+                  <span className="mt-2 block text-xl font-semibold">{formatDisplayDate(checkIn, 'Choose date')}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveDateField('checkOut')}
+                  className={`rounded-[1.5rem] border p-4 text-left transition ${
+                    activeDateField === 'checkOut'
+                      ? 'border-brand-300 bg-brand-300/10 text-white'
+                      : 'border-white/10 bg-black/20 text-brand-100 hover:border-white/20'
+                  }`}
+                >
+                  <span className="text-xs uppercase tracking-[0.2em] text-brand-300">Check-out</span>
+                  <span className="mt-2 block text-xl font-semibold">{formatDisplayDate(checkOut, 'Choose date')}</span>
+                </button>
+              </div>
+
+              <div className="mt-5">
+                <div className="flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setVisibleMonth((current) => addMonths(current, -1))}
+                    disabled={!canGoToPreviousMonth}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-brand-100 transition hover:border-brand-300 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                    aria-label="Previous month"
+                  >
+                    &lt;
+                  </button>
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white">
+                    {monthFormatter.format(visibleMonth)}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setVisibleMonth((current) => addMonths(current, 1))}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-brand-100 transition hover:border-brand-300 hover:text-white"
+                    aria-label="Next month"
+                  >
+                    &gt;
+                  </button>
+                </div>
+
+                <div className="mt-4 grid grid-cols-7 gap-2 text-center text-xs uppercase tracking-[0.16em] text-brand-300">
+                  {WEEKDAYS.map((weekday) => (
+                    <span key={weekday}>{weekday}</span>
+                  ))}
+                </div>
+
+                <div className="mt-3 grid grid-cols-7 gap-2">
+                  {calendarDays.map((date) => {
+                    const dateKey = toDateKey(date);
+                    const disabled = isBeforeToday(date);
+                    const isCurrentMonth = date.getMonth() === visibleMonth.getMonth();
+                    const isCheckIn = dateKey === checkIn;
+                    const isCheckOut = dateKey === checkOut;
+                    const isInRange =
+                      !!checkInDate &&
+                      !!checkOutDate &&
+                      date.getTime() > checkInDate.getTime() &&
+                      date.getTime() < checkOutDate.getTime();
+
+                    return (
+                      <button
+                        key={dateKey}
+                        type="button"
+                        onClick={() => handleDateSelect(date)}
+                        disabled={disabled}
+                        className={`h-10 rounded-2xl text-sm transition ${
+                          isCheckIn || isCheckOut
+                            ? 'bg-brand-300 text-brand-950'
+                            : isInRange
+                              ? 'bg-brand-300/10 text-white'
+                              : isCurrentMonth
+                                ? 'text-brand-100 hover:bg-white/10'
+                                : 'text-brand-500 hover:bg-white/5'
+                        } ${disabled ? 'cursor-not-allowed opacity-25' : ''}`}
+                        aria-label={dateFormatter.format(date)}
+                        aria-pressed={isCheckIn || isCheckOut}
+                      >
+                        {date.getDate()}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <p className="mt-4 text-sm text-brand-300">
+                {activeDateField === 'checkIn' ? 'Select your arrival date.' : 'Select your departure date.'}
+              </p>
             </div>
             <div>
               <label className="mb-3 block text-sm uppercase tracking-[0.2em] text-brand-300">Guests</label>
