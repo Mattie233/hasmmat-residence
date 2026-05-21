@@ -7,8 +7,6 @@ import {
   PropertyPricingConfig,
 } from '@/types';
 
-export const DEFAULT_STRIPE_FEE_RATE = 0.02;
-
 export function normalizePriceLabsRate(rate: PriceLabsRawRate): NormalizedNightlyRate {
   const airbnbRate = Number(rate.airbnb_rate ?? rate.rate ?? 0);
   const priceLabsRate = Number(rate.pricelabs_rate ?? rate.rate ?? rate.airbnb_rate ?? 0);
@@ -53,10 +51,6 @@ export function calculateExtraGuestFee(guests: number, config: PropertyPricingCo
   return extraGuests * config.extraGuestFee;
 }
 
-export function calculateStripeFee(amount: number, rate = DEFAULT_STRIPE_FEE_RATE) {
-  return Math.round(amount * rate * 100) / 100;
-}
-
 export function buildFallbackRates(
   checkIn: string,
   nights: number,
@@ -97,8 +91,6 @@ export function calculatePricingBreakdown(params: {
   const discountRate = getDirectBookingDiscountRate(nights, bookingType);
   const discountAmount = Math.round(subtotal * discountRate);
   const totalAfterDiscount = subtotal - discountAmount;
-  const stripeFeeEstimate = calculateStripeFee(totalAfterDiscount, config.stripeFeeRate);
-  const hostPayoutEstimate = Math.round((totalAfterDiscount - stripeFeeEstimate) * 100) / 100;
   const guestSavings = Math.round(airbnbTotal - totalAfterDiscount);
   const guestSavingsPercentage = airbnbTotal > 0 ? Math.round((guestSavings / airbnbTotal) * 100) : 0;
 
@@ -115,8 +107,6 @@ export function calculatePricingBreakdown(params: {
     discountRate,
     discountAmount,
     totalAfterDiscount,
-    stripeFeeEstimate,
-    hostPayoutEstimate,
     guestSavings,
     guestSavingsPercentage,
     nightlyRates: rates.map((rate) => rate.priceLabsRate),

@@ -8,7 +8,6 @@ export const PROPERTY_PRICING_CONFIGS: Record<string, PropertyPricingConfig> = {
     cleaningFee: 60,
     includedGuests: 4,
     extraGuestFee: 20,
-    stripeFeeRate: 0.02,
     fallbackNightlyRate: 220,
   },
 };

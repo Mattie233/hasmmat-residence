@@ -50,7 +50,7 @@ export default function Home() {
               <p className="text-sm uppercase tracking-[0.25em] text-brand-300">Book direct & feel the difference</p>
               <h2 className="mt-4 text-3xl font-semibold text-white">Skip the platform fees and book straight with Hasmmat Residence.</h2>
               <p className="mt-4 max-w-2xl text-base leading-8 text-brand-200">
-                Enjoy real-time availability, flexibility for long stays, contractor-friendly rates, and secure Stripe checkout from our luxury Leeds home.
+                Enjoy real-time availability, flexibility for long stays, contractor-friendly rates, and simple bank-transfer deposits from our luxury Leeds home.
               </p>
             </div>
             <div className="grid gap-4 rounded-[2rem] bg-brand-950/90 p-6 text-brand-100">

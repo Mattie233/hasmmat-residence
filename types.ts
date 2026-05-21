@@ -64,7 +64,6 @@ export type PropertyPricingConfig = {
   cleaningFee: number;
   includedGuests: number;
   extraGuestFee: number;
-  stripeFeeRate: number;
   fallbackNightlyRate: number;
 };
 
@@ -89,8 +88,6 @@ export interface PricingBreakdown {
   discountRate: number;
   discountAmount: number;
   totalAfterDiscount: number;
-  stripeFeeEstimate: number;
-  hostPayoutEstimate: number;
   guestSavings: number;
   guestSavingsPercentage: number;
   nightlyRates: number[];
@@ -105,4 +102,3 @@ export type PricingApiResponse = PricingBreakdown & {
   currency: string;
   fallbackUsed: boolean;
 };
-

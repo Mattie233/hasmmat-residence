@@ -37,7 +37,6 @@ model Booking {
   totalPrice       Int
   status           BookingStatus @default(PENDING)
   paymentStatus    PaymentStatus @default(UNPAID)
-  stripeSessionId  String?
   createdAt        DateTime      @default(now())
 }
 
