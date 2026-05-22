@@ -189,7 +189,7 @@ export function BookingSection() {
         </p>
         <h2 className="text-4xl font-semibold text-white">Secure your stay with flexible rates and transparent pricing</h2>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-brand-200">
-          Choose your dates, set guest numbers, and check live Smoobu availability before sending a direct booking request.
+          Choose your dates, set guest numbers, and check live availability before sending a direct booking request.
         </p>
       </div>
 
@@ -308,7 +308,7 @@ export function BookingSection() {
 
               <p className="mt-4 text-sm text-brand-300">
                 {availabilityLoading
-                  ? 'Checking Smoobu availability...'
+                  ? 'Checking availability...'
                   : availabilityError
                     ? availabilityError
                     : activeDateField === 'checkIn'
@@ -358,12 +358,12 @@ export function BookingSection() {
           <div className="space-y-6 text-brand-100">
             <div className="rounded-[2rem] bg-white/5 p-6">
               <div className="flex items-center justify-between text-sm uppercase tracking-[0.2em] text-brand-300">
-                <span>Live Smoobu check</span>
+                <span>Live availability</span>
                 <span>{pricing?.savingsLabel ?? 'Real-time rate update'}</span>
               </div>
               <div className="mt-5 space-y-4 text-brand-200">
                 <div className="flex items-center justify-between">
-                  <span>Smoobu stay price</span>
+                  <span>Stay price</span>
                   <span>£{pricing ? pricing.rateTotal : '--'}</span>
                 </div>
                 {pricing?.cleaningFee ? (
@@ -397,7 +397,7 @@ export function BookingSection() {
               </p>
               <p className="mt-3 text-sm leading-6 text-brand-200">
                 Booking for {guests} guest{guests !== 1 ? 's' : ''} across {nights || '0'} night{nights !== 1 ? 's' : ''}.{' '}
-                Availability and price are checked against Smoobu before you send a request.
+                Availability and price are checked before you send a request.
               </p>
             </div>
 

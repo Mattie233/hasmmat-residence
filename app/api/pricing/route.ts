@@ -76,7 +76,7 @@ export async function POST(request: Request) {
         nightlyRates: Array.from({ length: nights }, () => nightlyAverage),
         airbnbRates: [],
         bookingType: bookingType as BookingType,
-        savingsLabel: 'Available in Smoobu',
+        savingsLabel: 'Available for your dates',
         fallbackUsed: false,
       },
       {
