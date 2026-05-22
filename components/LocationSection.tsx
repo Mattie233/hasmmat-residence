@@ -3,6 +3,11 @@
 import { locationPoints } from '@/lib/data';
 import { motion } from 'framer-motion';
 
+const propertyAddress = '62 Cross Flatts Grove, Leeds';
+const encodedAddress = encodeURIComponent(propertyAddress);
+const googleMapsEmbedUrl = `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+
 export function LocationSection() {
   return (
     <section id="location" className="container py-24">
@@ -18,12 +23,27 @@ export function LocationSection() {
 
       <div className="mt-12 grid gap-6 lg:grid-cols-2">
         <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-black/50 p-6 shadow-soft backdrop-blur-xl">
-          <div className="h-[350px] rounded-[2rem] bg-brand-950/90" />
+          <iframe
+            title={`Map showing ${propertyAddress}`}
+            src={googleMapsEmbedUrl}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="h-[350px] w-full rounded-[2rem] border-0 bg-brand-950/90"
+          />
           <div className="mt-6 text-brand-100">
-            <p className="mb-3 text-sm uppercase tracking-[0.25em] text-brand-300">Interactive map</p>
+            <p className="mb-3 text-sm uppercase tracking-[0.25em] text-brand-300">Find us</p>
+            <p className="text-xl font-semibold text-white">{propertyAddress}</p>
             <p className="text-base leading-7 text-brand-200">
-              Embed a live Google Map when ready. This layout is built to support a responsive map and distance explorer interface.
+              View the area, nearby transport links, and route options before you arrive.
             </p>
+            <a
+              href={googleMapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-5 inline-flex rounded-full border border-brand-300/30 px-5 py-3 text-sm font-semibold text-brand-100 transition hover:border-brand-100 hover:bg-white/5"
+            >
+              Open in Google Maps
+            </a>
           </div>
         </div>
 

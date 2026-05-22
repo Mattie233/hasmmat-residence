@@ -21,6 +21,7 @@ const structuredData = {
   image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80',
   address: {
     '@type': 'PostalAddress',
+    streetAddress: '62 Cross Flatts Grove',
     addressLocality: 'Leeds',
     addressRegion: 'West Yorkshire',
     postalCode: 'LS11',
