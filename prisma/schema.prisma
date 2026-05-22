@@ -18,6 +18,7 @@ model Property {
   basePrice   Int
   cleaningFee Int       @default(60)
   bookings    Booking[]
+  reviews     Review[]
   createdAt   DateTime  @default(now())
 }
 
@@ -38,6 +39,16 @@ model Booking {
   status           BookingStatus @default(PENDING)
   paymentStatus    PaymentStatus @default(UNPAID)
   createdAt        DateTime      @default(now())
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id])
+  author     String
+  rating     Int
+  feedback   String
+  createdAt  DateTime @default(now())
 }
 
 enum BookingStatus {

@@ -19,6 +19,7 @@ export type Review = {
   author: string;
   rating: number;
   feedback: string;
+  createdAt?: string;
 };
 
 export type LocationPoint = {
