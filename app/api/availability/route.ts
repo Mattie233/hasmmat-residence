@@ -21,6 +21,12 @@ function toDateKey(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
+function addDays(date: Date, amount: number) {
+  const nextDate = new Date(date);
+  nextDate.setDate(date.getDate() + amount);
+  return nextDate;
+}
+
 function eachDate(startDate: Date, endDate: Date) {
   const days: Date[] = [];
   const cursor = new Date(startDate);
@@ -54,19 +60,24 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Availability range must be between 1 and 63 days.' }, { status: 400 });
     }
 
-    const rates = await getSmoobuRates(SMOOBU_API_KEY, apartmentId, toDateKey(startDate), toDateKey(endDate));
+    const rates = await getSmoobuRates(SMOOBU_API_KEY, apartmentId, toDateKey(startDate), toDateKey(addDays(endDate, 1)));
     const apartmentRates = rates.data?.[`${apartmentId}`] || {};
 
     const body: CalendarAvailabilityResponse = {
       days: Object.fromEntries(
         eachDate(startDate, endDate).map((date) => {
           const dateKey = toDateKey(date);
+          const nextDateKey = toDateKey(addDays(date, 1));
           const rate = apartmentRates[dateKey];
+          const nextRate = apartmentRates[nextDateKey];
+          const nightAvailable = Number(rate?.available || 0) > 0;
+          const nextNightAvailable = Number(nextRate?.available || 0) > 0;
 
           return [
             dateKey,
             {
-              available: Number(rate?.available || 0) > 0,
+              available: nightAvailable,
+              checkInAvailable: nightAvailable || nextNightAvailable,
               price: typeof rate?.price === 'number' ? rate.price : null,
               minLengthOfStay: typeof rate?.min_length_of_stay === 'number' ? rate.min_length_of_stay : null,
             },

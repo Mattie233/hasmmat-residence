@@ -76,6 +76,7 @@ export type SmoobuRatesResponse = {
 
 export type CalendarAvailabilityDay = {
   available: boolean;
+  checkInAvailable: boolean;
   price: number | null;
   minLengthOfStay: number | null;
 };

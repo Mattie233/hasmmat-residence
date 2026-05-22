@@ -144,8 +144,12 @@ export function BookingSection() {
     if (isBeforeToday(date)) return;
 
     const selectedKey = toDateKey(date);
+    const dayAvailability = availability[selectedKey];
+    const checkInUnavailable = dayAvailability?.checkInAvailable === false;
 
     if (activeDateField === 'checkIn') {
+      if (checkInUnavailable) return;
+
       setCheckIn(selectedKey);
 
       if (checkOutDate && date.getTime() >= checkOutDate.getTime()) {
@@ -259,8 +263,13 @@ export function BookingSection() {
                   {calendarDays.map((date) => {
                     const dateKey = toDateKey(date);
                     const dayAvailability = availability[dateKey];
-                    const isUnavailable = dayAvailability?.available === false;
-                    const disabled = isBeforeToday(date) || isUnavailable;
+                    const isUnavailable = dayAvailability?.checkInAvailable === false;
+                    const disabled =
+                      isBeforeToday(date) ||
+                      (activeDateField === 'checkIn' && isUnavailable) ||
+                      (activeDateField === 'checkOut' &&
+                        !!checkInDate &&
+                        date.getTime() <= checkInDate.getTime());
                     const isCurrentMonth = date.getMonth() === visibleMonth.getMonth();
                     const isCheckIn = dateKey === checkIn;
                     const isCheckOut = dateKey === checkOut;
@@ -303,8 +312,8 @@ export function BookingSection() {
                   : availabilityError
                     ? availabilityError
                     : activeDateField === 'checkIn'
-                      ? 'Select your arrival date. Grey dates are unavailable.'
-                      : 'Select your departure date. Grey dates are unavailable.'}
+                      ? 'Select your arrival date. Grey dates cannot be used for check-in.'
+                      : 'Select your departure date. Turnover days can be selected.'}
               </p>
             </div>
             <div>
