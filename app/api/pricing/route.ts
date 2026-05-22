@@ -6,6 +6,9 @@ import { BookingType, PricingRequest } from '@/types';
 export const dynamic = 'force-dynamic';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
+const INCLUDED_GUESTS = 4;
+const EXTRA_GUEST_FEE = 15;
+const DIRECT_BOOKING_DISCOUNT_RATE = 0.15;
 
 export async function POST(request: Request) {
   try {
@@ -54,8 +57,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const totalPrice = Math.round(Number(smoobuPrice.price) * 100) / 100;
-    const nightlyAverage = Math.round((totalPrice / nights) * 100) / 100;
+    const stayPrice = Math.round(Number(smoobuPrice.price) * 100) / 100;
+    const extraGuestFeeTotal = Math.max(0, guests - INCLUDED_GUESTS) * EXTRA_GUEST_FEE * nights;
+    const subtotal = stayPrice + extraGuestFeeTotal;
+    const discountAmount = Math.round(subtotal * DIRECT_BOOKING_DISCOUNT_RATE * 100) / 100;
+    const totalAfterDiscount = Math.round((subtotal - discountAmount) * 100) / 100;
+    const nightlyAverage = Math.round((stayPrice / nights) * 100) / 100;
 
     return NextResponse.json(
       {
@@ -63,14 +70,14 @@ export async function POST(request: Request) {
         listingId: apartmentKey,
         currency: smoobuPrice.currency || 'GBP',
         nights,
-        rateTotal: totalPrice,
+        rateTotal: stayPrice,
         airbnbTotal: 0,
-        subtotal: totalPrice,
+        subtotal,
         cleaningFee: 0,
-        extraGuestFeeTotal: 0,
-        discountRate: 0,
-        discountAmount: 0,
-        totalAfterDiscount: totalPrice,
+        extraGuestFeeTotal,
+        discountRate: DIRECT_BOOKING_DISCOUNT_RATE,
+        discountAmount,
+        totalAfterDiscount,
         guestSavings: 0,
         guestSavingsPercentage: 0,
         nightlyRates: Array.from({ length: nights }, () => nightlyAverage),
