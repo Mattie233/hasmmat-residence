@@ -5,22 +5,31 @@ export const dynamic = 'force-dynamic';
 
 const MAX_FEEDBACK_LENGTH = 700;
 
+type StoredReview = {
+  author: string;
+  rating: number;
+  feedback: string;
+  createdAt: Date;
+};
+
+const serializeReview = (review: StoredReview) => ({
+  author: review.author,
+  rating: review.rating,
+  feedback: review.feedback,
+  createdAt: review.createdAt.toISOString(),
+});
+
 export async function GET() {
   try {
-    const reviews = await prisma.review.findMany({
+    const reviews = (await prisma.review.findMany({
       orderBy: {
         createdAt: 'desc',
       },
       take: 12,
-    });
+    })) as StoredReview[];
 
     return NextResponse.json({
-      reviews: reviews.map((review) => ({
-        author: review.author,
-        rating: review.rating,
-        feedback: review.feedback,
-        createdAt: review.createdAt.toISOString(),
-      })),
+      reviews: reviews.map(serializeReview),
     });
   } catch (error) {
     console.error('Reviews API error:', error instanceof Error ? error.message : error);
@@ -56,22 +65,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Please keep your review under 700 characters.' }, { status: 400 });
     }
 
-    const review = await prisma.review.create({
+    const review = (await prisma.review.create({
       data: {
         author,
         rating,
         feedback,
       },
-    });
+    })) as StoredReview;
 
     return NextResponse.json(
       {
-        review: {
-          author: review.author,
-          rating: review.rating,
-          feedback: review.feedback,
-          createdAt: review.createdAt.toISOString(),
-        },
+        review: serializeReview(review),
       },
       { status: 201 },
     );
