@@ -3,6 +3,8 @@ import { getSmoobuEnv } from '@/lib/env';
 import { checkSmoobuAvailability } from '@/lib/smoobu';
 import { BookingType, PricingRequest } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 export async function POST(request: Request) {

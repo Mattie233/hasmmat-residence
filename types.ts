@@ -61,6 +61,29 @@ export type SmoobuAvailabilityResponse = {
   detail?: string;
 };
 
+export type SmoobuRateDay = {
+  price: number | null;
+  min_length_of_stay: number | null;
+  available: number;
+};
+
+export type SmoobuRatesResponse = {
+  data?: Record<string, Record<string, SmoobuRateDay>>;
+  status?: number;
+  title?: string;
+  detail?: string;
+};
+
+export type CalendarAvailabilityDay = {
+  available: boolean;
+  price: number | null;
+  minLengthOfStay: number | null;
+};
+
+export type CalendarAvailabilityResponse = {
+  days: Record<string, CalendarAvailabilityDay>;
+};
+
 export interface PricingRequest {
   checkIn: string;
   checkOut: string;

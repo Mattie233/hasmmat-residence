@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePricing } from '@/hooks/usePricing';
-import type { BookingType } from '@/types';
+import type { BookingType, CalendarAvailabilityDay, CalendarAvailabilityResponse } from '@/types';
 
 const MIN_GUESTS = 1;
 const MAX_GUESTS = 8;
@@ -73,6 +73,9 @@ export function BookingSection() {
   const [checkOut, setCheckOut] = useState('');
   const [activeDateField, setActiveDateField] = useState<DateField>('checkIn');
   const [visibleMonth, setVisibleMonth] = useState(() => startOfMonth(new Date()));
+  const [availability, setAvailability] = useState<Record<string, CalendarAvailabilityDay>>({});
+  const [availabilityLoading, setAvailabilityLoading] = useState(false);
+  const [availabilityError, setAvailabilityError] = useState<string | null>(null);
   const [guests, setGuests] = useState(2);
   const bookingType: BookingType = 'flexible';
   const [status, setStatus] = useState<string | null>(null);
@@ -97,6 +100,45 @@ export function BookingSection() {
   const checkInDate = useMemo(() => parseDateKey(checkIn), [checkIn]);
   const checkOutDate = useMemo(() => parseDateKey(checkOut), [checkOut]);
   const canGoToPreviousMonth = visibleMonth.getTime() > currentMonth.getTime();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const startDate = toDateKey(calendarDays[0]);
+    const endDate = toDateKey(calendarDays[calendarDays.length - 1]);
+
+    const fetchAvailability = async () => {
+      setAvailabilityLoading(true);
+      setAvailabilityError(null);
+
+      try {
+        const response = await fetch(`/api/availability?startDate=${startDate}&endDate=${endDate}`, {
+          signal: controller.signal,
+        });
+        const data = (await response.json()) as CalendarAvailabilityResponse & { error?: string };
+
+        if (!response.ok || data.error) {
+          throw new Error(data.error || 'Unable to load availability.');
+        }
+
+        setAvailability(data.days);
+      } catch (fetchError) {
+        if (fetchError instanceof DOMException && fetchError.name === 'AbortError') {
+          return;
+        }
+
+        setAvailability({});
+        setAvailabilityError(fetchError instanceof Error ? fetchError.message : 'Availability unavailable.');
+      } finally {
+        if (!controller.signal.aborted) {
+          setAvailabilityLoading(false);
+        }
+      }
+    };
+
+    fetchAvailability();
+
+    return () => controller.abort();
+  }, [calendarDays]);
 
   const handleDateSelect = (date: Date) => {
     if (isBeforeToday(date)) return;
@@ -216,7 +258,9 @@ export function BookingSection() {
                 <div className="mt-3 grid grid-cols-7 gap-2">
                   {calendarDays.map((date) => {
                     const dateKey = toDateKey(date);
-                    const disabled = isBeforeToday(date);
+                    const dayAvailability = availability[dateKey];
+                    const isUnavailable = dayAvailability?.available === false;
+                    const disabled = isBeforeToday(date) || isUnavailable;
                     const isCurrentMonth = date.getMonth() === visibleMonth.getMonth();
                     const isCheckIn = dateKey === checkIn;
                     const isCheckOut = dateKey === checkOut;
@@ -235,6 +279,8 @@ export function BookingSection() {
                         className={`h-10 rounded-2xl text-sm transition ${
                           isCheckIn || isCheckOut
                             ? 'bg-brand-300 text-brand-950'
+                            : isUnavailable
+                              ? 'bg-white/[0.03] text-brand-500 line-through'
                             : isInRange
                               ? 'bg-brand-300/10 text-white'
                               : isCurrentMonth
@@ -252,7 +298,13 @@ export function BookingSection() {
               </div>
 
               <p className="mt-4 text-sm text-brand-300">
-                {activeDateField === 'checkIn' ? 'Select your arrival date.' : 'Select your departure date.'}
+                {availabilityLoading
+                  ? 'Checking Smoobu availability...'
+                  : availabilityError
+                    ? availabilityError
+                    : activeDateField === 'checkIn'
+                      ? 'Select your arrival date. Grey dates are unavailable.'
+                      : 'Select your departure date. Grey dates are unavailable.'}
               </p>
             </div>
             <div>
