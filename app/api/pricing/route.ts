@@ -8,7 +8,46 @@ export const dynamic = 'force-dynamic';
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const INCLUDED_GUESTS = 4;
 const EXTRA_GUEST_FEE = 15;
-const DIRECT_BOOKING_DISCOUNT_RATE = 0.15;
+const DIRECT_BOOKING_DISCOUNT_RATE = 0.1;
+const LAST_MINUTE_DISCOUNT_RATE = 0.12;
+const NON_REFUNDABLE_DISCOUNT_RATE = 0.18;
+const LONG_STAY_DISCOUNT_RATE = 0.2;
+const LONG_STAY_MIN_NIGHTS = 28;
+const LAST_MINUTE_DAYS = 7;
+
+function getDiscount(checkIn: string, nights: number, bookingType: BookingType) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const checkInDate = new Date(checkIn);
+  checkInDate.setHours(0, 0, 0, 0);
+  const daysUntilCheckIn = Math.ceil((checkInDate.getTime() - today.getTime()) / MS_PER_DAY);
+
+  if (nights >= LONG_STAY_MIN_NIGHTS) {
+    return {
+      rate: LONG_STAY_DISCOUNT_RATE,
+      label: 'Long-stay direct rate',
+    };
+  }
+
+  if (bookingType === 'nonrefundable') {
+    return {
+      rate: NON_REFUNDABLE_DISCOUNT_RATE,
+      label: 'Non-refundable direct rate',
+    };
+  }
+
+  if (daysUntilCheckIn >= 0 && daysUntilCheckIn <= LAST_MINUTE_DAYS) {
+    return {
+      rate: LAST_MINUTE_DISCOUNT_RATE,
+      label: 'Last-minute direct rate',
+    };
+  }
+
+  return {
+    rate: DIRECT_BOOKING_DISCOUNT_RATE,
+    label: 'Direct website rate',
+  };
+}
 
 export async function POST(request: Request) {
   try {
@@ -60,7 +99,8 @@ export async function POST(request: Request) {
     const stayPrice = Math.round(Number(smoobuPrice.price) * 100) / 100;
     const extraGuestFeeTotal = Math.max(0, guests - INCLUDED_GUESTS) * EXTRA_GUEST_FEE * nights;
     const subtotal = stayPrice + extraGuestFeeTotal;
-    const discountAmount = Math.round(subtotal * DIRECT_BOOKING_DISCOUNT_RATE * 100) / 100;
+    const discount = getDiscount(checkIn, nights, bookingType as BookingType);
+    const discountAmount = Math.round(subtotal * discount.rate * 100) / 100;
     const totalAfterDiscount = Math.round((subtotal - discountAmount) * 100) / 100;
     const nightlyAverage = Math.round((stayPrice / nights) * 100) / 100;
 
@@ -75,7 +115,7 @@ export async function POST(request: Request) {
         subtotal,
         cleaningFee: 0,
         extraGuestFeeTotal,
-        discountRate: DIRECT_BOOKING_DISCOUNT_RATE,
+        discountRate: discount.rate,
         discountAmount,
         totalAfterDiscount,
         guestSavings: 0,
@@ -83,7 +123,7 @@ export async function POST(request: Request) {
         nightlyRates: Array.from({ length: nights }, () => nightlyAverage),
         airbnbRates: [],
         bookingType: bookingType as BookingType,
-        savingsLabel: 'Available for your dates',
+        savingsLabel: discount.label,
         fallbackUsed: false,
       },
       {

@@ -11,6 +11,7 @@ const navLinks = [
   { label: 'Availability', href: '#booking' },
   { label: 'Reviews', href: '#reviews' },
   { label: 'Location', href: '#location' },
+  { label: 'Rules', href: '#policies' },
   { label: 'Contact', href: '#contact' }
 ];
 

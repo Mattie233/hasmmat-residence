@@ -9,6 +9,7 @@ import { Gallery } from '@/components/Gallery';
 import { Hero } from '@/components/Hero';
 import { LocationSection } from '@/components/LocationSection';
 import { Navbar } from '@/components/Navbar';
+import { PoliciesSection } from '@/components/PoliciesSection';
 import { Reviews } from '@/components/Reviews';
 import { RoomShowcase } from '@/components/RoomShowcase';
 import { siteInfo } from '@/lib/data';
@@ -27,7 +28,7 @@ const structuredData = {
     postalCode: 'LS11',
     addressCountry: 'GB'
   },
-  telephone: '+447700900123',
+  telephone: siteInfo.phone,
   url: 'https://www.hasmmat-residence.com',
   priceRange: '£220+',
   aggregateRating: {
@@ -35,7 +36,7 @@ const structuredData = {
     ratingValue: '5',
     reviewCount: '124'
   },
-  sameAs: ['https://www.facebook.com/', 'https://www.instagram.com/']
+  sameAs: [siteInfo.instagramUrl, siteInfo.tiktokUrl]
 };
 
 export default function Home() {
@@ -56,8 +57,8 @@ export default function Home() {
             </div>
             <div className="grid gap-4 rounded-[2rem] bg-brand-950/90 p-6 text-brand-100">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <span>Direct book savings</span>
-                <strong>Up to 20%</strong>
+                <span>Public direct saving</span>
+                <strong>10%</strong>
               </div>
               <div className="flex items-center justify-between border-b border-white/10 pb-4 pt-4">
                 <span>Early check-in requests</span>
@@ -65,7 +66,7 @@ export default function Home() {
               </div>
               <div className="flex items-center justify-between pt-4">
                 <span>Long stay discounts</span>
-                <strong>7+ nights</strong>
+                <strong>28+ nights</strong>
               </div>
             </div>
           </div>
@@ -79,6 +80,7 @@ export default function Home() {
       <LocationSection />
       <AboutSection />
       <FAQSection />
+      <PoliciesSection />
       <ContactSection />
       <Footer />
       <FloatingCTA />

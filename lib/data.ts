@@ -5,6 +5,11 @@ export const siteInfo = {
     'Luxury 4-bedroom house with flexible stays, fast WiFi, free parking, and direct-book savings near Elland Road.',
   ctaText: 'Book Direct',
   bookingNotice: 'Secure your premium stay with direct booking discounts and fast check-out.',
+  email: 'hello@hasmmat-residence.com',
+  phone: '+44 7700 900123',
+  whatsappUrl: 'https://wa.me/447700900123',
+  instagramUrl: 'https://www.instagram.com/',
+  tiktokUrl: 'https://www.tiktok.com/',
   highlights: [
     'Sleeps up to 8 guests',
     'Free parking & workspace',
@@ -137,7 +142,7 @@ export const locationPoints = [
 export const faqs = [
   {
     question: 'What time is check-in and check-out?',
-    answer: 'Check-in is after 3pm and check-out is by 11am. Flexible arrivals can be arranged on request.'
+    answer: 'Check-in and check-out times are confirmed in writing before arrival. Check-in details are only released after full payment is received.'
   },
   {
     question: 'Is parking included?',
@@ -149,14 +154,105 @@ export const faqs = [
   },
   {
     question: 'What is your cancellation policy?',
-    answer: 'Cancellation terms are confirmed with your booking request before any bank-transfer deposit is requested.'
+    answer: 'Refundable bookings receive a full refund 7+ days before check-in, 50% within 3-7 days, and no refund within 72 hours. Non-refundable bookings are discounted and cannot be refunded after payment.'
   },
   {
     question: 'Do you offer long-stay discounts?',
-    answer: 'Yes. Extended stays of 7+ nights receive a bespoke long-stay rate.'
+    answer: 'Yes. Extended stays of 28+ nights can receive up to 20% below the standard channel rate.'
   },
   {
     question: 'Is a deposit required?',
-    answer: 'A refundable security deposit is requested for bookings and confirmed before bank-transfer details are sent.'
+    answer: 'A deposit may be required. Bookings are not confirmed until the required payment is received by bank transfer.'
   }
+];
+
+export const houseRules = [
+  'No parties or events',
+  'No smoking inside the property',
+  'No illegal substances',
+  'No excessive noise',
+  'Respect neighbours and surrounding properties',
+  'Only registered guests allowed',
+  'No unauthorised visitors',
+  'Quiet hours are 10 PM - 7 AM',
+  'Guests must report damages immediately',
+  'Guests must leave the property in reasonable condition',
+  'Turn off lights and appliances before checkout',
+  'Lock all windows and doors when leaving',
+  'Lost keys may result in replacement charges',
+  'Additional cleaning fees may apply if house rules are breached'
+];
+
+export const cancellationPolicy = [
+  {
+    title: 'Refundable bookings',
+    points: [
+      'Full refund if cancelled 7+ days before check-in',
+      '50% refund if cancelled within 3-7 days before check-in',
+      'No refund within 72 hours of check-in'
+    ]
+  },
+  {
+    title: 'Non-refundable bookings',
+    points: [
+      'Discounted rate agreed before payment',
+      'No refund after payment has been received'
+    ]
+  }
+];
+
+export const directBookingTerms = [
+  {
+    title: 'Booking confirmation',
+    body:
+      'A booking request does not confirm your stay. Your booking is only confirmed when the required payment has cleared and written confirmation has been issued.'
+  },
+  {
+    title: 'Payment terms',
+    body:
+      'Payments are made by bank transfer. Bank details are provided after availability, guest details, and the agreed booking amount have been confirmed.'
+  },
+  {
+    title: 'Deposits and balance',
+    body:
+      'A deposit may be required to reserve dates. The remaining balance must be paid by the deadline provided in your confirmation message.'
+  },
+  {
+    title: 'Check-in details',
+    body:
+      'Check-in details, access instructions, and key information are only released after full payment has been received.'
+  },
+  {
+    title: 'Damage responsibility',
+    body:
+      'Guests are responsible for damage, missing items, misuse of the property, and costs caused by breaches of the house rules.'
+  },
+  {
+    title: 'Guest conduct',
+    body:
+      'Guests must behave responsibly, respect neighbours, follow quiet hours, and ensure only registered guests stay at or access the property.'
+  },
+  {
+    title: 'Liability limits',
+    body:
+      'The business is not responsible for guest belongings, travel disruption, third-party services, or events outside reasonable control.'
+  },
+  {
+    title: 'Refusal rights',
+    body:
+      'The business reserves the right to decline bookings, request verification, refuse access, or cancel stays where there is a security, conduct, payment, or misuse concern.'
+  },
+  {
+    title: 'Additional charges',
+    body:
+      'Additional cleaning, key replacement, call-out, repair, or damage charges may apply where the property is left in poor condition or rules are breached.'
+  }
+];
+
+export const pricingRules = [
+  { label: 'Public direct website pricing', value: '10% below the standard channel rate' },
+  { label: 'Returning guests', value: '15% below the standard channel rate' },
+  { label: 'Last-minute unsold dates', value: '12-15% below the standard channel rate' },
+  { label: 'Non-refundable bookings', value: '18% below the standard channel rate' },
+  { label: 'Long stays of 28+ nights', value: '20% below the standard channel rate' }
 ];

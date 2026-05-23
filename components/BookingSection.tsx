@@ -77,7 +77,7 @@ export function BookingSection() {
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
   const [availabilityError, setAvailabilityError] = useState<string | null>(null);
   const [guests, setGuests] = useState(2);
-  const bookingType: BookingType = 'flexible';
+  const [bookingType, setBookingType] = useState<BookingType>('flexible');
   const [status, setStatus] = useState<string | null>(null);
 
   const nights = useMemo(() => {
@@ -346,6 +346,36 @@ export function BookingSection() {
               </div>
               <p className="mt-2 text-sm text-brand-300">£15 per extra guest per night after 4 guests.</p>
             </div>
+
+            <div>
+              <p className="mb-3 text-sm uppercase tracking-[0.2em] text-brand-300">Booking type</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => setBookingType('flexible')}
+                  className={`rounded-[1.5rem] border p-4 text-left transition ${
+                    bookingType === 'flexible'
+                      ? 'border-brand-300 bg-brand-300/10 text-white'
+                      : 'border-white/10 bg-white/5 text-brand-100 hover:border-white/20'
+                  }`}
+                >
+                  <span className="text-sm font-semibold">Refundable</span>
+                  <span className="mt-2 block text-xs leading-5 text-brand-300">Standard direct rate with the published cancellation policy.</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBookingType('nonrefundable')}
+                  className={`rounded-[1.5rem] border p-4 text-left transition ${
+                    bookingType === 'nonrefundable'
+                      ? 'border-brand-300 bg-brand-300/10 text-white'
+                      : 'border-white/10 bg-white/5 text-brand-100 hover:border-white/20'
+                  }`}
+                >
+                  <span className="text-sm font-semibold">Non-refundable</span>
+                  <span className="mt-2 block text-xs leading-5 text-brand-300">Discounted rate with no refund after payment.</span>
+                </button>
+              </div>
+            </div>
           </div>
         </motion.div>
 
@@ -380,7 +410,7 @@ export function BookingSection() {
                 ) : null}
                 {pricing?.discountAmount ? (
                   <div className="flex items-center justify-between text-emerald-300">
-                    <span>Direct booking discount</span>
+                    <span>Direct booking discount ({Math.round(pricing.discountRate * 100)}%)</span>
                     <span>-£{pricing.discountAmount}</span>
                   </div>
                 ) : null}

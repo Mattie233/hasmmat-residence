@@ -1,5 +1,7 @@
 'use client';
 
+import { siteInfo } from '@/lib/data';
+
 export function Footer() {
   return (
     <footer className="border-t border-white/10 bg-black/80 py-10 text-brand-200">
@@ -22,10 +24,10 @@ export function Footer() {
         <div>
           <p className="text-sm uppercase tracking-[0.22em] text-brand-300">Policies</p>
           <ul className="mt-4 space-y-3 text-sm text-brand-200">
-            <li>Terms & Conditions</li>
-            <li>Privacy Policy</li>
-            <li>House Rules</li>
-            <li>Cancellation Policy</li>
+            <li><a href="#policies" className="transition hover:text-white">Terms & Conditions</a></li>
+            <li><a href="#policies" className="transition hover:text-white">House Rules</a></li>
+            <li><a href="#policies" className="transition hover:text-white">Cancellation Policy</a></li>
+            <li><a href="#contact" className="transition hover:text-white">Direct Enquiry</a></li>
           </ul>
         </div>
       </div>
@@ -34,8 +36,9 @@ export function Footer() {
           <p>© {new Date().getFullYear()} Hasmmat Residence. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span>Follow us:</span>
-            <a href="#" className="transition hover:text-white">Instagram</a>
-            <a href="#" className="transition hover:text-white">Facebook</a>
+            <a href={siteInfo.instagramUrl} target="_blank" rel="noreferrer" className="transition hover:text-white">Instagram</a>
+            <a href={siteInfo.tiktokUrl} target="_blank" rel="noreferrer" className="transition hover:text-white">TikTok</a>
+            <a href={siteInfo.whatsappUrl} target="_blank" rel="noreferrer" className="transition hover:text-white">WhatsApp</a>
           </div>
         </div>
       </div>
