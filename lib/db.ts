@@ -7,12 +7,8 @@ const globalForPrisma = globalThis as unknown as {
 
 const databaseUrl = process.env.DATABASE_URL;
 
-if (!databaseUrl) {
-  throw new Error('Missing DATABASE_URL environment variable.');
-}
-
 const adapter = new PrismaPg({
-  connectionString: databaseUrl.replace(/\?.*$/, ''),
+  connectionString: (databaseUrl || 'postgresql://postgres:postgres@localhost:5432/postgres').replace(/\?.*$/, ''),
   ssl: {
     rejectUnauthorized: false,
   },
