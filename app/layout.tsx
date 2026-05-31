@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     url: 'https://www.hasmmat-residence.com',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80',
+        url: '/images/hasmmatres62/PHOTO-2026-04-11-00-10-02_4.jpg',
         width: 1200,
         height: 630
       }

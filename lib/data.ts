@@ -1,3 +1,5 @@
+const propertyImage = (fileName: string) => `/images/hasmmatres62/${fileName}`;
+
 export const siteInfo = {
   name: 'Hasmmat Residence',
   tagline: 'Premium stays in Leeds for families, contractors & city visitors.',
@@ -6,8 +8,8 @@ export const siteInfo = {
   ctaText: 'Book Direct',
   bookingNotice: 'Secure your premium stay with direct booking discounts and fast check-out.',
   email: 'hello@hasmmat-residence.com',
-  phone: '+44 7700 900123',
-  whatsappUrl: 'https://wa.me/447700900123',
+  phone: '+44 7983818344',
+  whatsappUrl: 'https://wa.me/447983818344',
   instagramUrl: 'https://www.instagram.com/',
   tiktokUrl: 'https://www.tiktok.com/',
   highlights: [
@@ -22,20 +24,17 @@ export const heroSlides = [
   {
     title: 'Luxury 4 Bedroom Stay in Leeds',
     subtitle: 'Sleeps 8 • Free Parking • Fast WiFi • Near Elland Road',
-    image:
-      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80'
+    image: propertyImage('PHOTO-2026-04-11-00-10-02_4.jpg')
   },
   {
     title: 'Boutique Comfort for Groups',
     subtitle: 'Ready for family trips, contractors, and football fans.',
-    image:
-      'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80'
+    image: propertyImage('PHOTO-2026-04-11-00-10-02_11.jpg')
   },
   {
     title: 'Direct Booking, Best Rates',
     subtitle: 'No marketplace fees. Flexible stays with premium service.',
-    image:
-      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80'
+    image: propertyImage('PHOTO-2026-04-11-00-10-02_12.jpg')
   }
 ];
 
@@ -43,32 +42,62 @@ export const galleryImages = [
   {
     category: 'Bedrooms',
     title: 'King Suite',
-    src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80'
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_14.jpg')
   },
   {
     category: 'Living Room',
     title: 'Designer lounge',
-    src: 'https://images.unsplash.com/photo-1549187774-b4e9b0445b0b?auto=format&fit=crop&w=900&q=80'
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_8.jpg')
   },
   {
     category: 'Kitchen',
     title: 'Chef-ready kitchen',
-    src: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80'
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_15.jpg')
   },
   {
-    category: 'Workspace',
-    title: 'Dedicated workspace',
-    src: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=900&q=80'
+    category: 'Backyard',
+    title: 'Spacious garden',
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_16.jpg')
   },
   {
     category: 'Bathroom',
-    title: 'Spa-style bathroom',
-    src: 'https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=900&q=80'
+    title: 'Modern bathroom',
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_17.jpg')
   },
   {
-    category: 'Exterior',
+    category: 'Entrance',
     title: 'Private entrance',
-    src: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80'
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_18.jpg')
+  },
+  {
+    category: 'Bedrooms',
+    title: 'Guest bedroom',
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_13.jpg')
+  },
+  {
+    category: 'Living Room',
+    title: 'Relaxed seating area',
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_10.jpg')
+  },
+  {
+    category: 'Dining',
+    title: 'Dining space',
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_21.jpg')
+  },
+  {
+    category: 'Bedrooms',
+    title: 'Bright bedroom',
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_6.jpg')
+  },
+  {
+    category: 'Property',
+    title: 'Comfort details',
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_20.jpg')
+  },
+  {
+    category: 'Property',
+    title: 'Home exterior',
+    src: propertyImage('PHOTO-2026-04-11-00-10-02_22.jpg')
   }
 ];
 
@@ -88,29 +117,25 @@ export const roomShowcase = [
     title: 'Master Bedroom',
     description:
       'King-size bed, plush linens, smart lighting, premium blackout curtains for restful stays.',
-    image:
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'
+    image: propertyImage('PHOTO-2026-04-11-00-10-02_14.jpg')
   },
   {
     title: 'Living Area',
     description:
       'Spacious lounge with designer sofa, ambience lighting, and HDMI-ready smart TV for match nights.',
-    image:
-      'https://images.unsplash.com/photo-1549187774-b4e9b0445b0b?auto=format&fit=crop&w=1200&q=80'
+    image: propertyImage('PHOTO-2026-04-11-00-10-02_8.jpg')
   },
   {
     title: 'Kitchen & Dining',
     description:
       'Full kitchen with oven, coffee station, and dining table that seats eight guests comfortably.',
-    image:
-      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80'
+    image: propertyImage('PHOTO-2026-04-11-00-10-02_15.jpg')
   },
   {
     title: 'Workspace',
     description:
       'High-performance desk area with power, natural light, and calm decor for productive stays.',
-    image:
-      'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80'
+    image: propertyImage('PHOTO-2026-04-11-00-10-02.jpg')
   }
 ];
 
