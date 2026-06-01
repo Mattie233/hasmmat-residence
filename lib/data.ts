@@ -77,7 +77,7 @@ export const galleryImages = [
   {
     category: 'Backyard',
     title: 'Spacious backyard',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_22.jpg')
+    src: propertyImage('1da97795-14b5-4d6e-b4d8-13f8eadd9b8c~1.jpeg')
   }
 ];
 
