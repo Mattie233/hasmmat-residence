@@ -52,7 +52,7 @@ export const galleryImages = [
   {
     category: 'Kitchen',
     title: 'Chef-ready kitchen',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_15.jpg')
+    src: propertyImage('Kitchen.jpeg')
   },
   {
     category: 'Bathroom',
@@ -106,16 +106,16 @@ export const roomShowcase = [
     image: propertyImage('PHOTO-2026-04-11-00-10-02_8.jpg')
   },
   {
-    title: 'Kitchen & Dining',
+    title: 'Entertainment',
     description:
-      'Full kitchen with oven, coffee station, and dining table that seats eight guests comfortably.',
-    image: propertyImage('PHOTO-2026-04-11-00-10-02_15.jpg')
+      'Watch DAZN,Netflix and other streaming services on the large-screen smart TV.',
+    image: propertyImage('image6.jpeg')
   },
   {
     title: 'Workspace',
     description:
       'High-performance desk area with power, natural light, and calm decor for productive stays.',
-    image: propertyImage('PHOTO-2026-04-11-00-10-02.jpg')
+    image: propertyImage('PHOTO-2026-04-11-00-10-02_22.jpg')
   }
 ];
 
