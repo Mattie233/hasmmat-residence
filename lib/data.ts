@@ -29,25 +29,25 @@ export const heroSlides = [
   {
     title: 'Boutique Comfort for Groups',
     subtitle: 'Ready for family trips, contractors, and football fans.',
-    image: propertyImage('PHOTO-2026-04-11-00-10-02_11.jpg')
+    image: propertyImage('image1.jpeg')
   },
   {
     title: 'Direct Booking, Best Rates',
     subtitle: 'No marketplace fees. Flexible stays with premium service.',
-    image: propertyImage('PHOTO-2026-04-11-00-10-02_12.jpg')
+    image: propertyImage('image0.jpeg')
   }
 ];
 
 export const galleryImages = [
   {
-    category: 'Bedrooms',
-    title: 'King Suite',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_14.jpg')
-  },
-  {
     category: 'Living Room',
     title: 'Designer lounge',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_8.jpg')
+    src: propertyImage('image1.jpeg')
+  },
+  {
+    category: 'Bedroom 1',
+    title: 'Double bedroom',
+    src: propertyImage('image0.jpeg')
   },
   {
     category: 'Kitchen',
@@ -55,48 +55,28 @@ export const galleryImages = [
     src: propertyImage('PHOTO-2026-04-11-00-10-02_15.jpg')
   },
   {
-    category: 'Backyard',
-    title: 'Spacious garden',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_16.jpg')
-  },
-  {
     category: 'Bathroom',
     title: 'Modern bathroom',
+    src: propertyImage('20260426_184931.jpeg')
+  },
+  {
+    category: 'Bedroom 2',
+    title: 'Single bedroom',
     src: propertyImage('PHOTO-2026-04-11-00-10-02_17.jpg')
   },
   {
-    category: 'Entrance',
-    title: 'Private entrance',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_18.jpg')
+    category: 'Bedroom 3',
+    title: 'Double bedroom',
+    src: propertyImage('image2.jpeg')
   },
   {
-    category: 'Bedrooms',
-    title: 'Guest bedroom',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_13.jpg')
-  },
-  {
-    category: 'Living Room',
-    title: 'Relaxed seating area',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_10.jpg')
-  },
-  {
-    category: 'Dining',
-    title: 'Dining space',
+    category: 'Bedroom 4',
+    title: 'Double bedroom',
     src: propertyImage('PHOTO-2026-04-11-00-10-02_21.jpg')
   },
   {
-    category: 'Bedrooms',
-    title: 'Bright bedroom',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_6.jpg')
-  },
-  {
-    category: 'Property',
-    title: 'Comfort details',
-    src: propertyImage('PHOTO-2026-04-11-00-10-02_20.jpg')
-  },
-  {
-    category: 'Property',
-    title: 'Home exterior',
+    category: 'Backyard',
+    title: 'Spacious backyard',
     src: propertyImage('PHOTO-2026-04-11-00-10-02_22.jpg')
   }
 ];
