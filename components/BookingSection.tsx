@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePricing } from '@/hooks/usePricing';
+import { BOOKING_REQUEST_EVENT, type BookingRequestDetail } from '@/lib/bookingRequest';
 import type { BookingType, CalendarAvailabilityDay, CalendarAvailabilityResponse } from '@/types';
 
 const MIN_GUESTS = 1;
@@ -21,7 +22,6 @@ const dateFormatter = new Intl.DateTimeFormat('en-GB', {
 });
 
 type DateField = 'checkIn' | 'checkOut';
-
 function toDateKey(date: Date) {
   const year = date.getFullYear();
   const month = `${date.getMonth() + 1}`.padStart(2, '0');
@@ -177,7 +177,18 @@ export function BookingSection() {
       return;
     }
 
-    setStatus('Send your dates through the contact form and we will confirm the deposit and bank transfer details.');
+    const detail: BookingRequestDetail = {
+      checkIn,
+      checkOut,
+      guests,
+      nights,
+      bookingType,
+      total: pricing.totalAfterDiscount,
+      savingsLabel: pricing.savingsLabel,
+    };
+
+    window.dispatchEvent(new CustomEvent<BookingRequestDetail>(BOOKING_REQUEST_EVENT, { detail }));
+    setStatus('Your booking details have been added to the contact form.');
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 

@@ -1,8 +1,14 @@
 'use client';
 
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { BOOKING_REQUEST_EVENT, type BookingRequestDetail } from '@/lib/bookingRequest';
 import { siteInfo } from '@/lib/data';
+import type { BookingType } from '@/types';
+
+function formatBookingType(value: BookingType) {
+  return value === 'nonrefundable' ? 'Non-refundable' : 'Refundable';
+}
 
 export function ContactSection() {
   const [name, setName] = useState('');
@@ -11,6 +17,35 @@ export function ContactSection() {
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    const handleBookingRequest = (event: Event) => {
+      const { checkIn, checkOut, guests, nights, bookingType, total, savingsLabel } = (
+        event as CustomEvent<BookingRequestDetail>
+      ).detail;
+
+      setDates(`${checkIn} to ${checkOut}`);
+      setGuests(`${guests}`);
+      setMessage(
+        [
+          'I would like to request this direct booking:',
+          '',
+          `Check-in: ${checkIn}`,
+          `Check-out: ${checkOut}`,
+          `Guests: ${guests}`,
+          `Nights: ${nights}`,
+          `Booking type: ${formatBookingType(bookingType)}`,
+          `Quoted total: £${total.toFixed(0)}`,
+          `Rate: ${savingsLabel}`,
+          '',
+          'Please confirm availability, deposit amount, and bank transfer details.',
+        ].join('\n'),
+      );
+    };
+
+    window.addEventListener(BOOKING_REQUEST_EVENT, handleBookingRequest);
+    return () => window.removeEventListener(BOOKING_REQUEST_EVENT, handleBookingRequest);
+  }, []);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
