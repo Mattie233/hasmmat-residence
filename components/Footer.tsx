@@ -33,7 +33,7 @@ export function Footer() {
       </div>
       <div className="mt-10 border-t border-white/10 pt-6 text-sm text-brand-300">
         <div className="container flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} Hasmmat Residence. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Hasmmat Cleaning Service LTD trading as Hasmmat Residence. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span>Follow us:</span>
             <a href={siteInfo.instagramUrl} target="_blank" rel="noreferrer" className="transition hover:text-white">Instagram</a>
