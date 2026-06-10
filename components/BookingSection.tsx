@@ -79,6 +79,7 @@ export function BookingSection() {
   const [guests, setGuests] = useState(2);
   const [bookingType, setBookingType] = useState<BookingType>('flexible');
   const [status, setStatus] = useState<string | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const nights = useMemo(() => {
     if (!checkIn || !checkOut) return 0;
@@ -190,6 +191,43 @@ export function BookingSection() {
     window.dispatchEvent(new CustomEvent<BookingRequestDetail>(BOOKING_REQUEST_EVENT, { detail }));
     setStatus('Your booking details have been added to the contact form.');
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleStripeCheckout = async () => {
+    if (!checkIn || !checkOut || nights < 1 || !pricing?.valid) {
+      setStatus('Select valid dates and guest count before payment.');
+      return;
+    }
+
+    setCheckoutLoading(true);
+    setStatus(null);
+
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          checkIn,
+          checkOut,
+          guests,
+          nights,
+          bookingType,
+          total: pricing.totalAfterDiscount,
+          savingsLabel: pricing.savingsLabel,
+        }),
+      });
+      const data = (await response.json()) as { url?: string; error?: string };
+
+      if (!response.ok || data.error || !data.url) {
+        throw new Error(data.error || 'Unable to start card payment.');
+      }
+
+      window.location.href = data.url;
+    } catch (checkoutError) {
+      setStatus(checkoutError instanceof Error ? checkoutError.message : 'Unable to start card payment.');
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
 
   return (
@@ -431,7 +469,7 @@ export function BookingSection() {
             <div className="rounded-[2rem] bg-brand-900/80 p-6 text-white">
               <div className="flex items-center justify-between text-sm uppercase tracking-[0.2em] text-brand-300">
                 <span>Total price</span>
-                <span>Deposit by bank transfer</span>
+                <span>Secure card payment</span>
               </div>
               <p className="mt-4 text-4xl font-semibold">
                 {loading ? 'Loading…' : `£${pricing?.totalAfterDiscount?.toFixed(0) ?? '0'}`}
@@ -445,15 +483,22 @@ export function BookingSection() {
             <button
               onClick={handleBookingRequest}
               disabled={!pricing?.valid || loading}
-              className="w-full rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-full border border-brand-300/40 px-6 py-4 text-sm font-semibold text-brand-100 transition hover:border-brand-100 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? 'Updating price…' : 'Send booking request'}
             </button>
+            <button
+              onClick={handleStripeCheckout}
+              disabled={!pricing?.valid || loading || checkoutLoading}
+              className="w-full rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {checkoutLoading ? 'Opening Stripe...' : 'Pay securely by card'}
+            </button>
             <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 text-sm leading-6 text-brand-200">
-              <p className="font-semibold text-white">No online card payment is taken on this website.</p>
+              <p className="font-semibold text-white">Card payments are processed securely by Stripe.</p>
               <p className="mt-2">
-                Once your stay is confirmed, we provide bank details for the deposit and remaining balance.
-                Use your name and stay dates as the payment reference.
+                You can send an enquiry first, or continue to Stripe using the selected dates, guests, booking type,
+                and quoted total shown above.
               </p>
             </div>
             {pricing?.fallbackUsed ? (

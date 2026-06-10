@@ -167,7 +167,7 @@ export const faqs = [
   },
   {
     question: 'Is a deposit required?',
-    answer: 'A deposit may be required. Bookings are not confirmed until the required payment is received by bank transfer.'
+    answer: 'A deposit or full payment may be required. Card payments are processed securely by Stripe, and bookings are confirmed in writing after payment and guest details are verified.'
   }
 ];
 
@@ -215,7 +215,7 @@ export const directBookingTerms = [
   {
     title: 'Payment terms',
     body:
-      'Payments are made by bank transfer. Bank details are provided after availability, guest details, and the agreed booking amount have been confirmed.'
+      'Payments can be made securely by card through Stripe after availability, guest details, and the agreed booking amount have been confirmed.'
   },
   {
     title: 'Deposits and balance',

@@ -17,13 +17,18 @@ export function ContactSection() {
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
   const [message, setMessage] = useState('');
+  const [selectedBooking, setSelectedBooking] = useState<BookingRequestDetail | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const handleBookingRequest = (event: Event) => {
       const { checkIn, checkOut, guests, nights, bookingType, total, savingsLabel } = (
         event as CustomEvent<BookingRequestDetail>
       ).detail;
+      const booking = (event as CustomEvent<BookingRequestDetail>).detail;
 
+      setSelectedBooking(booking);
       setDates(`${checkIn} to ${checkOut}`);
       setGuests(`${guests}`);
       setMessage(
@@ -38,7 +43,7 @@ export function ContactSection() {
           `Quoted total: £${total.toFixed(0)}`,
           `Rate: ${savingsLabel}`,
           '',
-          'Please confirm availability, deposit amount, and bank transfer details.',
+          'Please confirm availability, payment amount, and the next steps.',
         ].join('\n'),
       );
     };
@@ -47,23 +52,37 @@ export function ContactSection() {
     return () => window.removeEventListener(BOOKING_REQUEST_EVENT, handleBookingRequest);
   }, []);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitting(true);
+    setStatus(null);
 
-    const subject = encodeURIComponent('Direct booking enquiry');
-    const body = encodeURIComponent(
-      [
-        `Name: ${name}`,
-        `Email: ${email}`,
-        `Phone/WhatsApp: ${phone || 'Not provided'}`,
-        `Dates: ${dates || 'Not provided'}`,
-        `Guests: ${guests || 'Not provided'}`,
-        '',
-        message
-      ].join('\n'),
-    );
+    try {
+      const response = await fetch('/api/enquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          dates,
+          guests,
+          message,
+          booking: selectedBooking,
+        }),
+      });
+      const data = (await response.json()) as { error?: string };
 
-    window.location.href = `mailto:${siteInfo.email}?subject=${subject}&body=${body}`;
+      if (!response.ok || data.error) {
+        throw new Error(data.error || 'Unable to send enquiry.');
+      }
+
+      setStatus('Thanks. Your enquiry has been sent to Hasmmat Residence.');
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Unable to send enquiry.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -141,9 +160,14 @@ export function ContactSection() {
               className="min-h-[160px] rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-white outline-none focus:border-brand-300"
               placeholder="Ask about long stay rates, match-day availability or direct booking benefits."
             />
-            <button type="submit" className="rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300">
-              Send enquiry
+            <button
+              type="submit"
+              disabled={submitting}
+              className="rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitting ? 'Sending enquiry...' : 'Send enquiry'}
             </button>
+            {status ? <p className="text-sm leading-6 text-brand-200">{status}</p> : null}
           </div>
         </motion.form>
 
