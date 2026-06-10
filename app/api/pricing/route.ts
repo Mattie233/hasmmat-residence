@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const INCLUDED_GUESTS = 4;
-const EXTRA_GUEST_FEE = 15;
+const EXTRA_GUEST_FEE = 20;
 const DIRECT_BOOKING_DISCOUNT_RATE = 0.1;
 const LAST_MINUTE_DISCOUNT_RATE = 0.12;
 const NON_REFUNDABLE_DISCOUNT_RATE = 0.18;
@@ -96,9 +96,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const stayPrice = Math.round(Number(smoobuPrice.price) * 100) / 100;
-    const extraGuestFeeTotal = Math.max(0, guests - INCLUDED_GUESTS) * EXTRA_GUEST_FEE * nights;
-    const subtotal = stayPrice + extraGuestFeeTotal;
+    const smoobuStayPrice = Math.round(Number(smoobuPrice.price) * 100) / 100;
+    const extraGuestFeeTotal = Math.max(0, guests - INCLUDED_GUESTS) * EXTRA_GUEST_FEE;
+    const stayPrice = Math.round((smoobuStayPrice + extraGuestFeeTotal) * 100) / 100;
+    const subtotal = stayPrice;
     const discount = getDiscount(checkIn, nights, bookingType as BookingType);
     const discountAmount = Math.round(subtotal * discount.rate * 100) / 100;
     const totalAfterDiscount = Math.round((subtotal - discountAmount) * 100) / 100;
@@ -114,7 +115,7 @@ export async function POST(request: Request) {
         airbnbTotal: 0,
         subtotal,
         cleaningFee: 0,
-        extraGuestFeeTotal,
+        extraGuestFeeTotal: 0,
         discountRate: discount.rate,
         discountAmount,
         totalAfterDiscount,

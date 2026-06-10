@@ -393,7 +393,7 @@ export function BookingSection() {
                   +
                 </button>
               </div>
-              <p className="mt-2 text-sm text-brand-300">£15 per extra guest per night after 4 guests.</p>
+              <p className="mt-2 text-sm text-brand-300">£20 per extra guest after 4 guests, added to the stay price.</p>
             </div>
 
             <div>
