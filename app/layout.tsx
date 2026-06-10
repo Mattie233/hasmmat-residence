@@ -5,6 +5,11 @@ export const metadata: Metadata = {
   title: 'Hasmmat Residence | Luxury 4 Bedroom Stay in Leeds',
   description: 'Premium serviced accommodation in Leeds for families, contractors, groups and football fans near Elland Road.',
   metadataBase: new URL('https://www.hasmmat-residence.com'),
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg'
+  },
   openGraph: {
     title: 'Hasmmat Residence | Luxury 4 Bedroom Stay in Leeds',
     description: 'Book direct for premium family, contractor and group accommodation near Elland Road.',
