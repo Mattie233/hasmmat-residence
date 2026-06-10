@@ -1,12 +1,25 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { galleryImages } from '@/lib/data';
 
 export function Gallery() {
   const [active, setActive] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (active === null) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setActive(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [active]);
 
   return (
     <section id="gallery" className="container py-24">
@@ -45,14 +58,21 @@ export function Gallery() {
       </div>
 
       {active !== null ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+          onClick={() => setActive(null)}
+        >
           <button
             onClick={() => setActive(null)}
-            className="absolute right-6 top-6 rounded-full border border-white/20 bg-black/70 px-4 py-2 text-sm text-white"
+            className="fixed right-4 top-4 z-[60] flex min-h-12 min-w-12 items-center justify-center rounded-full border border-white/30 bg-black/85 px-4 py-3 text-sm font-semibold text-white shadow-soft backdrop-blur-md sm:right-6 sm:top-6"
+            aria-label="Close image viewer"
           >
             Close
           </button>
-          <div className="relative h-full w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-black/80 shadow-soft">
+          <div
+            className="relative h-full w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-black/80 shadow-soft"
+            onClick={(event) => event.stopPropagation()}
+          >
             <Image
               src={galleryImages[active].src}
               alt={galleryImages[active].title}
