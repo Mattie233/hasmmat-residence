@@ -19,3 +19,8 @@ export type GuestBookingDetails = {
   guestAddress: string;
   specialRequests: string;
 };
+
+export type BookingConfirmationRequest = BookingRequestDetail &
+  GuestBookingDetails & {
+    propertyName: string;
+  };

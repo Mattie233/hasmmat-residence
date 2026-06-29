@@ -3,7 +3,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePricing } from '@/hooks/usePricing';
-import { BOOKING_REQUEST_EVENT, type BookingRequestDetail, type GuestBookingDetails } from '@/lib/bookingRequest';
+import {
+  BOOKING_REQUEST_EVENT,
+  type BookingConfirmationRequest,
+  type BookingRequestDetail,
+  type GuestBookingDetails,
+} from '@/lib/bookingRequest';
+import { siteInfo } from '@/lib/data';
 import type { BookingType, CalendarAvailabilityDay, CalendarAvailabilityResponse } from '@/types';
 
 const MIN_GUESTS = 1;
@@ -79,7 +85,9 @@ export function BookingSection() {
   const [guests, setGuests] = useState(2);
   const [bookingType, setBookingType] = useState<BookingType>('flexible');
   const [status, setStatus] = useState<string | null>(null);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [statusTone, setStatusTone] = useState<'info' | 'success' | 'error'>('info');
+  const [confirmationLoading, setConfirmationLoading] = useState(false);
+  const [propertyName, setPropertyName] = useState(siteInfo.name);
   const [guestDetails, setGuestDetails] = useState<GuestBookingDetails>({
     guestName: '',
     guestEmail: '',
@@ -109,10 +117,16 @@ export function BookingSection() {
   const checkInDate = useMemo(() => parseDateKey(checkIn), [checkIn]);
   const checkOutDate = useMemo(() => parseDateKey(checkOut), [checkOut]);
   const canGoToPreviousMonth = visibleMonth.getTime() > currentMonth.getTime();
-  const hasGuestDetails = Boolean(
+  const hasRequiredBookingFields = Boolean(
     guestDetails.guestName.trim() &&
       guestDetails.guestEmail.includes('@') &&
       guestDetails.guestPhone.trim() &&
+      propertyName.trim() &&
+      checkIn &&
+      checkOut &&
+      guests > 0 &&
+      pricing?.valid &&
+      pricing.totalAfterDiscount > 0 &&
       termsAccepted,
   );
 
@@ -189,6 +203,7 @@ export function BookingSection() {
   const handleBookingRequest = () => {
     if (!checkIn || !checkOut || nights < 1 || !pricing?.valid) {
       setStatus('Select valid dates and guest count.');
+      setStatusTone('error');
       return;
     }
 
@@ -204,49 +219,57 @@ export function BookingSection() {
 
     window.dispatchEvent(new CustomEvent<BookingRequestDetail>(BOOKING_REQUEST_EVENT, { detail }));
     setStatus('Your booking details have been added to the contact form.');
+    setStatusTone('success');
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleStripeCheckout = async () => {
+  const handleConfirmBooking = async () => {
     if (!checkIn || !checkOut || nights < 1 || !pricing?.valid) {
-      setStatus('Select valid dates and guest count before payment.');
+      setStatus('Select valid dates and guest count before confirming your booking.');
+      setStatusTone('error');
       return;
     }
 
-    if (!hasGuestDetails) {
-      setStatus('Enter your name, email, phone number, and accept the booking terms before payment.');
+    if (!hasRequiredBookingFields) {
+      setStatus('Please complete all required booking details before confirming your booking.');
+      setStatusTone('error');
       return;
     }
 
-    setCheckoutLoading(true);
+    setConfirmationLoading(true);
     setStatus(null);
 
     try {
-      const response = await fetch('/api/checkout', {
+      const booking: BookingConfirmationRequest = {
+        checkIn,
+        checkOut,
+        guests,
+        nights,
+        bookingType,
+        propertyName,
+        total: pricing.totalAfterDiscount,
+        savingsLabel: pricing.savingsLabel,
+        ...guestDetails,
+      };
+
+      const response = await fetch('/api/booking-confirmation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          checkIn,
-          checkOut,
-          guests,
-          nights,
-          bookingType,
-          total: pricing.totalAfterDiscount,
-          savingsLabel: pricing.savingsLabel,
-          ...guestDetails,
-        }),
+        body: JSON.stringify(booking),
       });
-      const data = (await response.json()) as { url?: string; error?: string };
+      const data = (await response.json()) as { message?: string; error?: string };
 
-      if (!response.ok || data.error || !data.url) {
-        throw new Error(data.error || 'Unable to start card payment.');
+      if (!response.ok || data.error || !data.message) {
+        throw new Error(data.error || 'Unable to confirm booking.');
       }
 
-      window.location.href = data.url;
-    } catch (checkoutError) {
-      setStatus(checkoutError instanceof Error ? checkoutError.message : 'Unable to start card payment.');
+      setStatus(data.message);
+      setStatusTone('success');
+    } catch {
+      setStatus('Sorry, we could not confirm your booking right now. Please try again later or contact Hasmmat Residence directly.');
+      setStatusTone('error');
     } finally {
-      setCheckoutLoading(false);
+      setConfirmationLoading(false);
     }
   };
 
@@ -450,10 +473,22 @@ export function BookingSection() {
               <p className="mb-4 text-sm uppercase tracking-[0.2em] text-brand-300">Guest details</p>
               <div className="grid gap-4">
                 <label className="grid gap-2 text-sm text-brand-200">
+                  Property selected
+                  <select
+                    value={propertyName}
+                    onChange={(event) => setPropertyName(event.target.value)}
+                    required
+                    className="rounded-3xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-brand-300"
+                  >
+                    <option value={siteInfo.name}>{siteInfo.name}</option>
+                  </select>
+                </label>
+                <label className="grid gap-2 text-sm text-brand-200">
                   Full name
                   <input
                     value={guestDetails.guestName}
                     onChange={(event) => setGuestDetails((current) => ({ ...current, guestName: event.target.value }))}
+                    required
                     className="rounded-3xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-brand-300"
                     placeholder="Lead guest name"
                   />
@@ -464,6 +499,7 @@ export function BookingSection() {
                     type="email"
                     value={guestDetails.guestEmail}
                     onChange={(event) => setGuestDetails((current) => ({ ...current, guestEmail: event.target.value }))}
+                    required
                     className="rounded-3xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-brand-300"
                     placeholder="you@example.com"
                   />
@@ -474,6 +510,7 @@ export function BookingSection() {
                     <input
                       value={guestDetails.guestPhone}
                       onChange={(event) => setGuestDetails((current) => ({ ...current, guestPhone: event.target.value }))}
+                      required
                       className="rounded-3xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-brand-300"
                       placeholder="+44..."
                     />
@@ -552,7 +589,7 @@ export function BookingSection() {
             <div className="rounded-[2rem] bg-brand-900/80 p-6 text-white">
               <div className="flex items-center justify-between text-sm uppercase tracking-[0.2em] text-brand-300">
                 <span>Total price</span>
-                <span>Secure card payment</span>
+                <span>Booking confirmation</span>
               </div>
               <p className="mt-4 text-4xl font-semibold">
                 {loading ? 'Loading…' : `£${pricing?.totalAfterDiscount?.toFixed(0) ?? '0'}`}
@@ -571,24 +608,36 @@ export function BookingSection() {
               {loading ? 'Updating price…' : 'Send booking request'}
             </button>
             <button
-              onClick={handleStripeCheckout}
-              disabled={!pricing?.valid || loading || checkoutLoading || !hasGuestDetails}
+              onClick={handleConfirmBooking}
+              disabled={!pricing?.valid || loading || confirmationLoading || !hasRequiredBookingFields}
               className="w-full rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {checkoutLoading ? 'Opening Stripe...' : 'Pay securely by card'}
+              {confirmationLoading ? 'Confirming booking...' : 'Confirm Booking'}
             </button>
             <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 text-sm leading-6 text-brand-200">
-              <p className="font-semibold text-white">Card payments are processed securely by Stripe.</p>
+              <p className="font-semibold text-white">Confirmation emails are sent securely after booking.</p>
               <p className="mt-2">
-                You can send an enquiry first, or continue to Stripe using the selected dates, guests, booking type,
-                and quoted total shown above.
+                You can send an enquiry first, or confirm this booking using the selected property, dates, guests,
+                guest details, and quoted total shown above.
               </p>
             </div>
             {pricing?.fallbackUsed ? (
               <p className="text-sm text-amber-200">Pricing is using temporarily cached fallback values.</p>
             ) : null}
             {error ? <p className="text-sm text-amber-200">{error}</p> : null}
-            {status ? <p className="text-sm text-brand-200">{status}</p> : null}
+            {status ? (
+              <p
+                className={`rounded-3xl border p-4 text-sm leading-6 ${
+                  statusTone === 'success'
+                    ? 'border-emerald-300/30 bg-emerald-300/10 text-emerald-100'
+                    : statusTone === 'error'
+                      ? 'border-amber-300/30 bg-amber-300/10 text-amber-100'
+                      : 'border-white/10 bg-white/5 text-brand-200'
+                }`}
+              >
+                {status}
+              </p>
+            ) : null}
           </div>
         </motion.div>
       </div>
