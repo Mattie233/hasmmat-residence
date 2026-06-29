@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePricing } from '@/hooks/usePricing';
-import { BOOKING_REQUEST_EVENT, type BookingRequestDetail } from '@/lib/bookingRequest';
+import { BOOKING_REQUEST_EVENT, type BookingRequestDetail, type GuestBookingDetails } from '@/lib/bookingRequest';
 import type { BookingType, CalendarAvailabilityDay, CalendarAvailabilityResponse } from '@/types';
 
 const MIN_GUESTS = 1;
@@ -80,6 +80,14 @@ export function BookingSection() {
   const [bookingType, setBookingType] = useState<BookingType>('flexible');
   const [status, setStatus] = useState<string | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [guestDetails, setGuestDetails] = useState<GuestBookingDetails>({
+    guestName: '',
+    guestEmail: '',
+    guestPhone: '',
+    guestAddress: '',
+    specialRequests: '',
+  });
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const nights = useMemo(() => {
     if (!checkIn || !checkOut) return 0;
@@ -101,6 +109,12 @@ export function BookingSection() {
   const checkInDate = useMemo(() => parseDateKey(checkIn), [checkIn]);
   const checkOutDate = useMemo(() => parseDateKey(checkOut), [checkOut]);
   const canGoToPreviousMonth = visibleMonth.getTime() > currentMonth.getTime();
+  const hasGuestDetails = Boolean(
+    guestDetails.guestName.trim() &&
+      guestDetails.guestEmail.includes('@') &&
+      guestDetails.guestPhone.trim() &&
+      termsAccepted,
+  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -199,6 +213,11 @@ export function BookingSection() {
       return;
     }
 
+    if (!hasGuestDetails) {
+      setStatus('Enter your name, email, phone number, and accept the booking terms before payment.');
+      return;
+    }
+
     setCheckoutLoading(true);
     setStatus(null);
 
@@ -214,6 +233,7 @@ export function BookingSection() {
           bookingType,
           total: pricing.totalAfterDiscount,
           savingsLabel: pricing.savingsLabel,
+          ...guestDetails,
         }),
       });
       const data = (await response.json()) as { url?: string; error?: string };
@@ -425,6 +445,69 @@ export function BookingSection() {
                 </button>
               </div>
             </div>
+
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-5">
+              <p className="mb-4 text-sm uppercase tracking-[0.2em] text-brand-300">Guest details</p>
+              <div className="grid gap-4">
+                <label className="grid gap-2 text-sm text-brand-200">
+                  Full name
+                  <input
+                    value={guestDetails.guestName}
+                    onChange={(event) => setGuestDetails((current) => ({ ...current, guestName: event.target.value }))}
+                    className="rounded-3xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-brand-300"
+                    placeholder="Lead guest name"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm text-brand-200">
+                  Email for confirmation
+                  <input
+                    type="email"
+                    value={guestDetails.guestEmail}
+                    onChange={(event) => setGuestDetails((current) => ({ ...current, guestEmail: event.target.value }))}
+                    className="rounded-3xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-brand-300"
+                    placeholder="you@example.com"
+                  />
+                </label>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="grid gap-2 text-sm text-brand-200">
+                    Phone or WhatsApp
+                    <input
+                      value={guestDetails.guestPhone}
+                      onChange={(event) => setGuestDetails((current) => ({ ...current, guestPhone: event.target.value }))}
+                      className="rounded-3xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-brand-300"
+                      placeholder="+44..."
+                    />
+                  </label>
+                  <label className="grid gap-2 text-sm text-brand-200">
+                    Address
+                    <input
+                      value={guestDetails.guestAddress}
+                      onChange={(event) => setGuestDetails((current) => ({ ...current, guestAddress: event.target.value }))}
+                      className="rounded-3xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-brand-300"
+                      placeholder="Optional"
+                    />
+                  </label>
+                </div>
+                <label className="grid gap-2 text-sm text-brand-200">
+                  Notes for your stay
+                  <textarea
+                    value={guestDetails.specialRequests}
+                    onChange={(event) => setGuestDetails((current) => ({ ...current, specialRequests: event.target.value }))}
+                    className="min-h-[104px] rounded-3xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-brand-300"
+                    placeholder="Arrival time, contractor stay details, children, accessibility needs, or other requests."
+                  />
+                </label>
+                <label className="flex items-start gap-3 rounded-3xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-brand-200">
+                  <input
+                    type="checkbox"
+                    checked={termsAccepted}
+                    onChange={(event) => setTermsAccepted(event.target.checked)}
+                    className="mt-1 h-4 w-4 accent-brand-300"
+                  />
+                  <span>I confirm the details are correct and agree to the house rules, cancellation policy, and direct booking terms.</span>
+                </label>
+              </div>
+            </div>
           </div>
         </motion.div>
 
@@ -489,7 +572,7 @@ export function BookingSection() {
             </button>
             <button
               onClick={handleStripeCheckout}
-              disabled={!pricing?.valid || loading || checkoutLoading}
+              disabled={!pricing?.valid || loading || checkoutLoading || !hasGuestDetails}
               className="w-full rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {checkoutLoading ? 'Opening Stripe...' : 'Pay securely by card'}

@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server';
-import type { BookingRequestDetail } from '@/lib/bookingRequest';
+import type { BookingRequestDetail, GuestBookingDetails } from '@/lib/bookingRequest';
 import { siteInfo } from '@/lib/data';
 
 export const dynamic = 'force-dynamic';
 
-type CheckoutRequest = BookingRequestDetail & {
-  guestEmail?: string;
-};
+type CheckoutRequest = BookingRequestDetail & GuestBookingDetails;
 
 function formatBookingType(value: string) {
   return value === 'nonrefundable' ? 'Non-refundable' : 'Refundable';
@@ -22,11 +20,28 @@ function getBaseUrl(request: Request) {
   return 'http://localhost:3000';
 }
 
+function metadataText(value: string | undefined, fallback: string) {
+  return (value?.trim() || fallback).slice(0, 500);
+}
+
 export async function POST(request: Request) {
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     const body = (await request.json()) as CheckoutRequest;
-    const { checkIn, checkOut, guests, nights, bookingType, total, savingsLabel, guestEmail } = body;
+    const {
+      checkIn,
+      checkOut,
+      guests,
+      nights,
+      bookingType,
+      total,
+      savingsLabel,
+      guestName,
+      guestEmail,
+      guestPhone,
+      guestAddress,
+      specialRequests,
+    } = body;
 
     if (!stripeSecretKey) {
       return NextResponse.json(
@@ -37,6 +52,10 @@ export async function POST(request: Request) {
 
     if (!checkIn || !checkOut || !guests || !nights || !bookingType || !total || total <= 0) {
       return NextResponse.json({ error: 'Missing required checkout details.' }, { status: 400 });
+    }
+
+    if (!guestName?.trim() || !guestEmail?.includes('@') || !guestPhone?.trim()) {
+      return NextResponse.json({ error: 'Missing required guest details.' }, { status: 400 });
     }
 
     const baseUrl = getBaseUrl(request);
@@ -62,10 +81,13 @@ export async function POST(request: Request) {
     params.set('metadata[bookingType]', formatBookingType(bookingType));
     params.set('metadata[quotedTotal]', `£${total.toFixed(0)}`);
     params.set('metadata[rate]', savingsLabel);
+    params.set('metadata[guestName]', metadataText(guestName, 'Not provided'));
+    params.set('metadata[guestEmail]', metadataText(guestEmail, 'Not provided'));
+    params.set('metadata[guestPhone]', metadataText(guestPhone, 'Not provided'));
+    params.set('metadata[guestAddress]', metadataText(guestAddress, 'Not provided'));
+    params.set('metadata[specialRequests]', metadataText(specialRequests, 'None'));
 
-    if (guestEmail?.includes('@')) {
-      params.set('customer_email', guestEmail);
-    }
+    params.set('customer_email', guestEmail.trim());
 
     const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
       method: 'POST',

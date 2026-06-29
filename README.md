@@ -26,14 +26,18 @@ SMOOBU_API_KEY=your_smoobu_api_key
 SMOOBU_CUSTOMER_ID=1705732
 SMOOBU_APARTMENT_ID=3264062
 STRIPE_SECRET_KEY=sk_live_or_test_key
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+RESEND_API_KEY=your_resend_api_key
+BOOKING_EMAIL_FROM="Hasmmat Residence <bookings@your-domain.com>"
+BOOKING_NOTIFICATION_EMAIL=your_owner_email@example.com
 NEXT_PUBLIC_SITE_URL=https://www.hasmmat-residence.com
 ```
 
 ## Notes
 
 - Uses Next.js App Router, Tailwind CSS, Framer Motion, and Smoobu availability/pricing.
-- Placeholder images are remote assets from Unsplash.
-- Stripe Checkout takes secure card payments from the selected booking details.
-- The enquiry form opens the guest's email app with their details and exact booking selection prefilled for `hasmmatresidence@yahoo.com`.
+- Stripe Checkout takes secure card payments from the selected booking and guest details.
+- Stripe webhooks send a guest confirmation email and an owner notification email after successful payment.
+- The enquiry form opens the guest's email app with their details and exact booking selection prefilled.
 # hasmmat-residence
 # hasmmat-residence

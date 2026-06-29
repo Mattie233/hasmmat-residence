@@ -11,3 +11,11 @@ export type BookingRequestDetail = {
   total: number;
   savingsLabel: string;
 };
+
+export type GuestBookingDetails = {
+  guestName: string;
+  guestEmail: string;
+  guestPhone: string;
+  guestAddress: string;
+  specialRequests: string;
+};
