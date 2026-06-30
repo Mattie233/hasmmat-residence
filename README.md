@@ -33,7 +33,7 @@ NEXT_PUBLIC_SITE_URL=https://www.hasmmat-residence.com
 ## Notes
 
 - Uses Next.js App Router, Tailwind CSS, Framer Motion, and Smoobu availability/pricing.
-- The booking form sends guest confirmation and host notification emails through Resend from a secure server-side API route.
+- The booking form posts to `/api/booking`, which sends guest confirmation and host notification emails through Resend from a secure server-side API route.
 - `RESEND_API_KEY` must only be stored in Vercel Environment Variables and must never be exposed to client-side code.
 - The enquiry form opens the guest's email app with their details and exact booking selection prefilled.
 # hasmmat-residence

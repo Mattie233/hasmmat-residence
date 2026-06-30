@@ -12,24 +12,28 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function hasRequiredFields(body: BookingConfirmationRequest) {
-  return Boolean(
-    body.guestName?.trim() &&
-      isValidEmail(body.guestEmail || '') &&
-      body.guestPhone?.trim() &&
-      body.propertyName?.trim() &&
-      body.checkIn?.trim() &&
-      body.checkOut?.trim() &&
-      Number(body.guests) > 0 &&
-      Number(body.total) > 0,
-  );
+function getMissingFields(body: BookingConfirmationRequest) {
+  const missing: string[] = [];
+
+  if (!body.guestName?.trim()) missing.push('guestName');
+  if (!isValidEmail(body.guestEmail || '')) missing.push('guestEmail');
+  if (!body.guestPhone?.trim()) missing.push('guestPhone');
+  if (!body.propertyName?.trim()) missing.push('propertyName');
+  if (!body.checkIn?.trim()) missing.push('checkIn');
+  if (!body.checkOut?.trim()) missing.push('checkOut');
+  if (!(Number(body.guests) > 0)) missing.push('guests');
+  if (!(Number(body.total) > 0)) missing.push('total');
+
+  return missing;
 }
 
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as BookingConfirmationRequest;
+    const missingFields = getMissingFields(body);
 
-    if (!hasRequiredFields(body)) {
+    if (missingFields.length > 0) {
+      console.warn('Booking API validation failed:', { missingFields });
       return NextResponse.json({ error: REQUIRED_ERROR }, { status: 400 });
     }
 
@@ -49,7 +53,10 @@ export async function POST(request: Request) {
         'Thank you for your booking! A confirmation email has been sent to your email address. If you do not receive it within a few minutes, please check your spam or junk folder.',
     });
   } catch (error) {
-    console.error('Booking confirmation email error:', error instanceof Error ? error.message : error);
+    console.error('Booking API Resend email failed:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return NextResponse.json({ error: SEND_ERROR }, { status: 500 });
   }
 }
