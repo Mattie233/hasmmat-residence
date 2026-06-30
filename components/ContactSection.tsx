@@ -18,6 +18,9 @@ export function ContactSection() {
   const [guests, setGuests] = useState('');
   const [message, setMessage] = useState('');
   const [selectedBooking, setSelectedBooking] = useState<BookingRequestDetail | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+  const [statusTone, setStatusTone] = useState<'success' | 'error'>('success');
 
   useEffect(() => {
     const handleBookingRequest = (event: Event) => {
@@ -50,7 +53,7 @@ export function ContactSection() {
     return () => window.removeEventListener(BOOKING_REQUEST_EVENT, handleBookingRequest);
   }, []);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const selectedBookingDetails = selectedBooking
@@ -67,21 +70,45 @@ export function ContactSection() {
         ]
       : [];
 
-    const subject = encodeURIComponent('Direct booking enquiry');
-    const body = encodeURIComponent(
-      [
-        `Name: ${name}`,
-        `Email: ${email}`,
-        `Phone/WhatsApp: ${phone || 'Not provided'}`,
-        `Dates: ${dates || 'Not provided'}`,
-        `Guests: ${guests || 'Not provided'}`,
-        '',
-        ...selectedBookingDetails,
-        message,
-      ].join('\n'),
-    );
+    const enquiryMessage = [...selectedBookingDetails, message].join('\n');
 
-    window.location.href = `mailto:${siteInfo.email}?subject=${subject}&body=${body}`;
+    setSubmitting(true);
+    setStatus(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          dates,
+          guests,
+          message: enquiryMessage,
+        }),
+      });
+      const data = (await response.json()) as { message?: string; error?: string };
+
+      if (!response.ok || data.error || !data.message) {
+        throw new Error(data.error || 'Unable to send enquiry.');
+      }
+
+      setName('');
+      setEmail('');
+      setPhone('');
+      setDates('');
+      setGuests('');
+      setMessage('');
+      setSelectedBooking(null);
+      setStatus(data.message);
+      setStatusTone('success');
+    } catch {
+      setStatus('Sorry, we could not send your enquiry right now. Please try again later or contact Hasmmat Residence directly.');
+      setStatusTone('error');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -130,6 +157,7 @@ export function ContactSection() {
                 <input
                   value={phone}
                   onChange={(event) => setPhone(event.target.value)}
+                  required
                   className="rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-white outline-none focus:border-brand-300"
                   placeholder="+44..."
                 />
@@ -139,6 +167,7 @@ export function ContactSection() {
                 <input
                   value={guests}
                   onChange={(event) => setGuests(event.target.value)}
+                  required
                   className="rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-white outline-none focus:border-brand-300"
                   placeholder="How many guests?"
                 />
@@ -148,6 +177,7 @@ export function ContactSection() {
             <input
               value={dates}
               onChange={(event) => setDates(event.target.value)}
+              required
               className="rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-white outline-none focus:border-brand-300"
               placeholder="Check-in and check-out dates"
             />
@@ -159,9 +189,24 @@ export function ContactSection() {
               className="min-h-[160px] rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-white outline-none focus:border-brand-300"
               placeholder="Ask about long stay rates, match-day availability or direct booking benefits."
             />
-            <button type="submit" className="rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300">
-              Send enquiry
+            <button
+              type="submit"
+              disabled={submitting}
+              className="rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitting ? 'Sending enquiry...' : 'Check availability and book direct'}
             </button>
+            {status ? (
+              <p
+                className={`rounded-3xl border p-4 text-sm leading-6 ${
+                  statusTone === 'success'
+                    ? 'border-emerald-300/30 bg-emerald-300/10 text-emerald-100'
+                    : 'border-amber-300/30 bg-amber-300/10 text-amber-100'
+                }`}
+              >
+                {status}
+              </p>
+            ) : null}
           </div>
         </motion.form>
 

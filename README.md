@@ -27,6 +27,7 @@ SMOOBU_CUSTOMER_ID=1705732
 SMOOBU_APARTMENT_ID=3264062
 RESEND_API_KEY=your_resend_api_key
 BOOKING_EMAIL_FROM="Hasmmat Residence <bookings@your-domain.com>"
+BOOKING_NOTIFICATION_EMAIL=hasmmatresidence@yahoo.com
 NEXT_PUBLIC_SITE_URL=https://www.hasmmat-residence.com
 ```
 
@@ -34,7 +35,7 @@ NEXT_PUBLIC_SITE_URL=https://www.hasmmat-residence.com
 
 - Uses Next.js App Router, Tailwind CSS, Framer Motion, and Smoobu availability/pricing.
 - The booking form posts to `/api/booking`, which sends guest confirmation and host notification emails through Resend from a secure server-side API route.
+- The direct enquiry form posts to `/api/contact`, which sends guest confirmation and host notification emails through the same Resend helper.
 - `RESEND_API_KEY` must only be stored in Vercel Environment Variables and must never be exposed to client-side code.
-- The enquiry form opens the guest's email app with their details and exact booking selection prefilled.
 # hasmmat-residence
 # hasmmat-residence

@@ -23,6 +23,16 @@ export type BookingConfirmationDetails = BookingConfirmationRequest & {
   submittedAt: string;
 };
 
+export type DirectEnquiryDetails = {
+  name: string;
+  email: string;
+  phone: string;
+  guests: string;
+  dates: string;
+  message: string;
+  submittedAt: string;
+};
+
 export function formatBookingType(value: BookingType | string) {
   return value === 'nonrefundable' ? 'Non-refundable' : value === 'flexible' ? 'Refundable' : value;
 }
@@ -201,6 +211,73 @@ export async function sendBookingConfirmationEmails(details: BookingConfirmation
       }),
       text: hostText,
       replyTo: details.guestEmail,
+    }),
+  ]);
+}
+
+export async function sendEnquiryEmails(details: DirectEnquiryDetails) {
+  const hostEmail = process.env.BOOKING_NOTIFICATION_EMAIL;
+
+  if (!hostEmail) {
+    throw new Error('Missing BOOKING_NOTIFICATION_EMAIL.');
+  }
+
+  const submittedAt = formatSubmittedAt(details.submittedAt);
+  const guestRows: Array<[string, string]> = [
+    ['Guest name', details.name],
+    ['Preferred dates', details.dates],
+    ['Number of guests', details.guests],
+    ['Enquiry message', details.message],
+  ];
+  const hostRows: Array<[string, string]> = [
+    ['Guest name', details.name],
+    ['Guest email', details.email],
+    ['Guest phone', details.phone],
+    ['Guests', details.guests],
+    ['Preferred dates', details.dates],
+    ['Full enquiry message', details.message],
+    ['Submitted', submittedAt],
+  ];
+
+  const guestText = [
+    `Hi ${details.name},`,
+    '',
+    `Thank you for contacting ${siteInfo.name}. We have received your enquiry and will respond as soon as possible.`,
+    '',
+    textRows(guestRows),
+    '',
+    `${siteInfo.name}`,
+    siteInfo.email,
+    siteInfo.phone,
+  ].join('\n');
+  const hostText = ['New direct enquiry received.', '', textRows(hostRows)].join('\n');
+
+  await Promise.all([
+    sendEmail({
+      to: details.email,
+      subject: 'Thank you for contacting Hasmmat Residence',
+      html: brandedEmailShell({
+        eyebrow: 'Direct enquiry',
+        heading: 'We have received your enquiry',
+        body: `Thank you for contacting ${siteInfo.name}. We have received your enquiry and will respond as soon as possible.`,
+        detailRows: guestRows,
+        footerNote: 'We will review your preferred dates and reply with availability, pricing, and the next steps.',
+      }),
+      text: guestText,
+      replyTo: hostEmail,
+    }),
+    sendEmail({
+      to: hostEmail,
+      subject: `New Direct Enquiry – ${details.name}`,
+      html: brandedEmailShell({
+        eyebrow: 'Direct enquiry',
+        heading: 'New direct enquiry received',
+        body: 'A guest has submitted the direct enquiry form on the Hasmmat Residence website.',
+        detailRows: hostRows,
+        footerNote: 'Reply to the guest with availability, pricing, and any booking requirements.',
+      }),
+      text: hostText,
+      replyTo: details.email,
     }),
   ]);
 }
