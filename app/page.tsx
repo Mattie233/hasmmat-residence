@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import { AboutSection } from '@/components/AboutSection';
 import { Amenities } from '@/components/Amenities';
 import { BookingSection } from '@/components/BookingSection';
@@ -40,9 +41,11 @@ const structuredData = {
 };
 
 export default function Home() {
+  const nonce = headers().get('x-csp-nonce') ?? undefined;
+
   return (
     <main className="relative overflow-hidden">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script nonce={nonce} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <Navbar />
       <Hero />
       <section className="container py-16">
