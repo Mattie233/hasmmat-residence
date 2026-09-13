@@ -15,6 +15,8 @@ import { Reviews } from '@/components/Reviews';
 import { RoomShowcase } from '@/components/RoomShowcase';
 import { siteInfo } from '@/lib/data';
 
+export const dynamic = 'force-dynamic';
+
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'LodgingBusiness',
@@ -61,7 +63,7 @@ export default function Home() {
             <div className="grid gap-4 rounded-[2rem] bg-brand-950/90 p-6 text-brand-100">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <span>Public direct saving</span>
-                <strong>10%</strong>
+                <strong>5%</strong>
               </div>
               <div className="flex items-center justify-between border-b border-white/10 pb-4 pt-4">
                 <span>Early check-in requests</span>

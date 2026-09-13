@@ -163,7 +163,7 @@ export const faqs = [
   },
   {
     question: 'Do you offer long-stay discounts?',
-    answer: 'Yes. Extended stays of 28+ nights can receive up to 20% below the standard channel rate.'
+    answer: 'Yes. Extended stays of 28+ nights can receive up to 12% below the standard channel rate.'
   },
   {
     question: 'Is a deposit required?',
@@ -255,9 +255,9 @@ export const directBookingTerms = [
 ];
 
 export const pricingRules = [
-  { label: 'Public direct website pricing', value: '10% below the standard channel rate' },
-  { label: 'Returning guests', value: '15% below the standard channel rate' },
-  { label: 'Last-minute unsold dates', value: '12-15% below the standard channel rate' },
-  { label: 'Non-refundable bookings', value: '18% below the standard channel rate' },
-  { label: 'Long stays of 28+ nights', value: '20% below the standard channel rate' }
+  { label: 'Public direct website pricing', value: '5% below the standard channel rate' },
+  { label: 'Returning guests', value: '8% below the standard channel rate' },
+  { label: 'Last-minute unsold dates', value: '8-10% below the standard channel rate' },
+  { label: 'Non-refundable bookings', value: '10% below the standard channel rate' },
+  { label: 'Long stays of 28+ nights', value: '12% below the standard channel rate' }
 ];

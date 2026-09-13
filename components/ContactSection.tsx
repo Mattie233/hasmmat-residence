@@ -257,7 +257,7 @@ export function ContactSection() {
           <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
             <h3 className="text-lg font-semibold text-white">Book direct & save</h3>
             <p className="mt-3 text-brand-200 leading-7">
-              Public direct website pricing is 10% below the standard channel rate, with stronger discounts available for returning guests, non-refundable bookings, last-minute dates, and stays of 28+ nights.
+              Public direct website pricing is 5% below the standard channel rate, with selective discounts available for non-refundable bookings, last-minute dates, and stays of 28+ nights.
             </p>
           </div>
         </motion.div>
