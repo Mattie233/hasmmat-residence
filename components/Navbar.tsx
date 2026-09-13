@@ -5,14 +5,15 @@ import { motion } from 'framer-motion';
 import { siteInfo } from '@/lib/data';
 
 const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Amenities', href: '#amenities' },
-  { label: 'Availability', href: '#booking' },
-  { label: 'Reviews', href: '#reviews' },
-  { label: 'Location', href: '#location' },
-  { label: 'Rules', href: '#policies' },
-  { label: 'Contact', href: '#contact' }
+  { label: 'Home', href: '/' },
+  { label: 'Gallery', href: '/#gallery' },
+  { label: 'Amenities', href: '/#amenities' },
+  { label: 'Contractor Stays', href: '/contractor-accommodation-leeds' },
+  { label: 'Availability', href: '/#booking' },
+  { label: 'Reviews', href: '/#reviews' },
+  { label: 'Location', href: '/#location' },
+  { label: 'Rules', href: '/#policies' },
+  { label: 'Contact', href: '/#contact' }
 ];
 
 export function Navbar() {

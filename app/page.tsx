@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { headers } from 'next/headers';
 import { AboutSection } from '@/components/AboutSection';
 import { Amenities } from '@/components/Amenities';
@@ -73,6 +74,33 @@ export default function Home() {
                 <span>Long stay discounts</span>
                 <strong>28+ nights</strong>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="container pb-8 pt-2">
+        <div className="rounded-[2rem] border border-white/10 bg-brand-950/90 p-6 text-brand-100 shadow-soft backdrop-blur-xl">
+          <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-sm uppercase tracking-[0.22em] text-brand-300">For project teams</p>
+              <h2 className="mt-3 text-3xl font-semibold text-white">Contractor Accommodation in Leeds</h2>
+              <p className="mt-3 text-base leading-8 text-brand-200">
+                Spacious 4-bedroom accommodation for contractors, engineers, tradespeople and business travellers working across Leeds and South Leeds.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/contractor-accommodation-leeds"
+                className="inline-flex items-center justify-center rounded-full bg-brand-400 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-300"
+              >
+                Explore contractor stays
+              </Link>
+              <a
+                href="#booking"
+                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-brand-100 transition hover:border-brand-300 hover:text-white"
+              >
+                Check availability
+              </a>
             </div>
           </div>
         </div>
