@@ -10,6 +10,7 @@ const navLinks = [
   { label: 'Amenities', href: '/#amenities' },
   { label: 'Contractor Stays', href: '/contractor-accommodation-leeds' },
   { label: 'Elland Road Stays', href: '/accommodation-near-elland-road' },
+  { label: 'Group Stays', href: '/group-accommodation-leeds' },
   { label: 'Availability', href: '/#booking' },
   { label: 'Reviews', href: '/#reviews' },
   { label: 'Location', href: '/#location' },

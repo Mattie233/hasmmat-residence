@@ -105,6 +105,25 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="container pb-8 pt-2">
+        <div className="rounded-[2rem] border border-white/10 bg-black/50 p-6 text-brand-100 shadow-soft backdrop-blur-xl">
+          <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-sm uppercase tracking-[0.22em] text-brand-300">For families, friends and groups</p>
+              <h2 className="mt-3 text-3xl font-semibold text-white">Group Accommodation in Leeds</h2>
+              <p className="mt-3 text-base leading-8 text-brand-200">
+                Stay together in our 4-bedroom South Leeds property, sleeping up to 8 guests with parking, Wi-Fi, kitchen and shared living space.
+              </p>
+            </div>
+            <Link
+              href="/group-accommodation-leeds"
+              className="inline-flex items-center justify-center rounded-full bg-brand-400 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-300"
+            >
+              Explore group stays
+            </Link>
+          </div>
+        </div>
+      </section>
       <Gallery />
       <Amenities />
       <RoomShowcase />
