@@ -140,7 +140,7 @@ export const reviews = [
 export const locationPoints = [
   { label: 'Elland Road', distance: '6 mins', note: 'Stadium access for match-day groups' },
   { label: 'Leeds City Centre', distance: '12 mins', note: 'Culture, dining and shopping nearby' },
-  { label: 'White Rose Centre', distance: '15 mins', note: 'Retail and leisure within easy reach' },
+  { label: 'White Rose Centre', distance: '7 mins', note: 'Retail and leisure within easy reach' },
   { label: 'Leeds Station', distance: '14 mins', note: 'Quick train connections across the UK' }
 ];
 
