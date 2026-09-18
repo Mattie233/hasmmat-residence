@@ -15,6 +15,11 @@ function formatBookingType(value: BookingType) {
   return value === 'nonrefundable' ? 'Non-refundable' : 'Refundable';
 }
 
+function formatEnquiryDate(value: string) {
+  const [year, month, day] = value.split('-');
+  return year && month && day ? `${day}-${month}-${year}` : value;
+}
+
 export function ContactSection() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -30,7 +35,7 @@ export function ContactSection() {
   useEffect(() => {
     const handleSelectedDates = (event: Event) => {
       const { checkIn, checkOut } = (event as CustomEvent<SelectedDatesDetail>).detail;
-      setDates(checkOut ? `${checkIn} to ${checkOut}` : checkIn);
+      setDates(checkOut ? `${formatEnquiryDate(checkIn)} to ${formatEnquiryDate(checkOut)}` : formatEnquiryDate(checkIn));
     };
 
     const handleBookingRequest = (event: Event) => {
@@ -40,14 +45,14 @@ export function ContactSection() {
       const booking = (event as CustomEvent<BookingRequestDetail>).detail;
 
       setSelectedBooking(booking);
-      setDates(`${checkIn} to ${checkOut}`);
+      setDates(`${formatEnquiryDate(checkIn)} to ${formatEnquiryDate(checkOut)}`);
       setGuests(`${guests}`);
       setMessage(
         [
           'I would like to request this direct booking:',
           '',
-          `Check-in: ${checkIn}`,
-          `Check-out: ${checkOut}`,
+          `Check-in: ${formatEnquiryDate(checkIn)}`,
+          `Check-out: ${formatEnquiryDate(checkOut)}`,
           `Guests: ${guests}`,
           `Nights: ${nights}`,
           `Booking type: ${formatBookingType(bookingType)}`,
@@ -73,8 +78,8 @@ export function ContactSection() {
     const selectedBookingDetails = selectedBooking
       ? [
           'Selected booking details:',
-          `Check-in: ${selectedBooking.checkIn}`,
-          `Check-out: ${selectedBooking.checkOut}`,
+          `Check-in: ${formatEnquiryDate(selectedBooking.checkIn)}`,
+          `Check-out: ${formatEnquiryDate(selectedBooking.checkOut)}`,
           `Guests: ${selectedBooking.guests}`,
           `Nights: ${selectedBooking.nights}`,
           `Booking type: ${formatBookingType(selectedBooking.bookingType)}`,
