@@ -63,6 +63,9 @@ export async function POST(request: Request) {
     const params = new URLSearchParams();
 
     params.set('mode', 'payment');
+    params.set('billing_address_collection', 'required');
+    params.set('phone_number_collection[enabled]', 'true');
+    params.set('payment_method_options[card][request_three_d_secure]', 'automatic');
     params.set('success_url', `${baseUrl}/?payment=success#booking`);
     params.set('cancel_url', `${baseUrl}/?payment=cancelled#booking`);
     params.set('line_items[0][quantity]', '1');

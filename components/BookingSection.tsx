@@ -6,7 +6,6 @@ import { usePricing } from '@/hooks/usePricing';
 import {
   BOOKING_REQUEST_EVENT,
   SELECTED_DATES_EVENT,
-  type BookingConfirmationRequest,
   type BookingRequestDetail,
   type GuestBookingDetails,
 } from '@/lib/bookingRequest';
@@ -87,7 +86,7 @@ export function BookingSection() {
   const [bookingType, setBookingType] = useState<BookingType>('flexible');
   const [status, setStatus] = useState<string | null>(null);
   const [statusTone, setStatusTone] = useState<'info' | 'success' | 'error'>('info');
-  const [confirmationLoading, setConfirmationLoading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [propertyName, setPropertyName] = useState(siteInfo.name);
   const [guestDetails, setGuestDetails] = useState<GuestBookingDetails>({
     guestName: '',
@@ -227,53 +226,48 @@ export function BookingSection() {
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleConfirmBooking = async () => {
+  const handleStripeCheckout = async () => {
     if (!checkIn || !checkOut || nights < 1 || !pricing?.valid) {
-      setStatus('Select valid dates and guest count before confirming your booking.');
+      setStatus('Select valid dates and guest count before booking.');
       setStatusTone('error');
       return;
     }
 
     if (!hasRequiredBookingFields) {
-      setStatus('Please complete all required booking details before confirming your booking.');
+      setStatus('Please complete the required guest details and accept the booking terms before booking.');
       setStatusTone('error');
       return;
     }
 
-    setConfirmationLoading(true);
+    setCheckoutLoading(true);
     setStatus(null);
 
     try {
-      const booking: BookingConfirmationRequest = {
-        checkIn,
-        checkOut,
-        guests,
-        nights,
-        bookingType,
-        propertyName,
-        total: pricing.totalAfterDiscount,
-        savingsLabel: pricing.savingsLabel,
-        ...guestDetails,
-      };
-
-      const response = await fetch('/api/booking', {
+      const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(booking),
+        body: JSON.stringify({
+          checkIn,
+          checkOut,
+          guests,
+          nights,
+          bookingType,
+          total: pricing.totalAfterDiscount,
+          savingsLabel: pricing.savingsLabel,
+          ...guestDetails,
+        }),
       });
-      const data = (await response.json()) as { message?: string; error?: string };
+      const data = (await response.json()) as { url?: string; error?: string };
 
-      if (!response.ok || data.error || !data.message) {
-        throw new Error(data.error || 'Unable to confirm booking.');
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || 'Unable to start secure checkout.');
       }
 
-      setStatus(data.message);
-      setStatusTone('success');
-    } catch {
-      setStatus('Sorry, we could not confirm your booking right now. Please try again later or contact Hasmmat Residence directly.');
+      window.location.assign(data.url);
+    } catch (checkoutError) {
+      setStatus(checkoutError instanceof Error ? checkoutError.message : 'Unable to start secure checkout.');
       setStatusTone('error');
-    } finally {
-      setConfirmationLoading(false);
+      setCheckoutLoading(false);
     }
   };
 
@@ -612,11 +606,11 @@ export function BookingSection() {
               {loading ? 'Updating price…' : 'Send booking request'}
             </button>
             <button
-              onClick={handleConfirmBooking}
-              disabled={!pricing?.valid || loading || confirmationLoading || !hasRequiredBookingFields}
+              onClick={handleStripeCheckout}
+              disabled={!pricing?.valid || loading || checkoutLoading || !hasRequiredBookingFields}
               className="w-full rounded-full bg-brand-400 px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {confirmationLoading ? 'Confirming booking...' : 'Confirm Booking'}
+              {checkoutLoading ? 'Opening secure checkout...' : 'Book Now with Stripe'}
             </button>
             <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 text-sm leading-6 text-brand-200">
               <p className="font-semibold text-white">Confirmation emails are sent securely after booking.</p>
