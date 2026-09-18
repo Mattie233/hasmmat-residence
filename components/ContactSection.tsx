@@ -204,7 +204,6 @@ export function ContactSection() {
             <textarea
               value={message}
               onChange={(event) => setMessage(event.target.value)}
-              required
               className="min-h-[160px] rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-white outline-none focus:border-brand-300"
               placeholder="Ask about long stay rates, match-day availability or direct booking benefits."
             />
