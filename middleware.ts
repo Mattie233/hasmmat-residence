@@ -16,9 +16,10 @@ export function middleware(request: NextRequest) {
     }
   });
 
+  const developmentScriptSource = process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : '';
   const cspHeader = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' https://js.stripe.com`,
+    `script-src 'self' 'nonce-${nonce}'${developmentScriptSource} https://js.stripe.com`,
     "style-src 'self' https://fonts.googleapis.com",
     "img-src 'self' data: https: blob: https://*.googleusercontent.com https://*.gstatic.com",
     "font-src 'self' https://fonts.gstatic.com data:",
