@@ -20,8 +20,8 @@ export function middleware(request: NextRequest) {
   const developmentScriptSource = process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : '';
   const cspHeader = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}'${developmentScriptSource} https://js.stripe.com`,
-    "style-src 'self' https://fonts.googleapis.com",
+    `script-src 'self' 'unsafe-inline'${developmentScriptSource} https://js.stripe.com`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: https: blob: https://*.googleusercontent.com https://*.gstatic.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "connect-src 'self' https://api.stripe.com https://*.stripe.com https://*.google.com https://*.googleapis.com",
