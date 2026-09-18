@@ -8,6 +8,7 @@ function createNonce() {
 export function middleware(request: NextRequest) {
   const nonce = createNonce();
   const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-nonce', nonce);
   requestHeaders.set('x-csp-nonce', nonce);
 
   const response = NextResponse.next({
