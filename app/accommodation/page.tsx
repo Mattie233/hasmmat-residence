@@ -23,7 +23,7 @@ export default function AccommodationPage() {
           See the bedrooms, lounge, shared spaces and practical amenities before you send an enquiry.
         </p>
         <Link href="/enquire" className="mt-8 inline-flex rounded-full bg-brand-400 px-7 py-3 text-sm font-semibold text-white transition hover:bg-brand-300">
-          Send an Enquiry
+          Enquire or Book
         </Link>
       </section>
       <Gallery />

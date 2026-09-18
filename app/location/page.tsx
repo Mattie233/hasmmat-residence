@@ -21,7 +21,7 @@ export default function LocationPage() {
           Use the map and local travel information to plan your stay. White Rose Shopping Centre is approximately a 7-minute drive from the property.
         </p>
         <Link href="/enquire" className="mt-8 inline-flex rounded-full bg-brand-400 px-7 py-3 text-sm font-semibold text-white transition hover:bg-brand-300">
-          Send an Enquiry
+          Enquire or Book
         </Link>
       </section>
       <LocationSection />

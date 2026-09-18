@@ -278,7 +278,7 @@ export default function AccommodationNearEllandRoadPage() {
                 href="/enquire#contact"
                 className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3 text-sm font-semibold text-brand-100 transition hover:border-brand-300 hover:text-white"
               >
-                Send an Enquiry
+                Enquire or Book
               </a>
             </div>
           </div>

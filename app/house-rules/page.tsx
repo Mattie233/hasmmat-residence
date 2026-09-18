@@ -21,7 +21,7 @@ export default function HouseRulesPage() {
           Review the house rules, booking terms and cancellation information before sending an enquiry.
         </p>
         <Link href="/enquire" className="mt-8 inline-flex rounded-full bg-brand-400 px-7 py-3 text-sm font-semibold text-white transition hover:bg-brand-300">
-          Send an Enquiry
+          Enquire or Book
         </Link>
       </section>
       <PoliciesSection />

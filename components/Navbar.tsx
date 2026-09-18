@@ -58,7 +58,7 @@ export function Navbar() {
           href="/enquire"
           className="rounded-full border border-brand-300/30 bg-brand-400/10 px-5 py-3 text-sm font-semibold text-brand-100 transition hover:border-brand-100 hover:bg-brand-400/20"
         >
-          Send an Enquiry
+          Enquire or Book
         </a>
       </div>
       {menuOpen ? (
@@ -70,7 +70,7 @@ export function Navbar() {
               </a>
             ))}
             <a href="/enquire" className="mt-2 rounded-2xl bg-brand-400 px-4 py-3 text-center font-semibold text-white">
-              Send an Enquiry
+              Enquire or Book
             </a>
           </div>
         </nav>
