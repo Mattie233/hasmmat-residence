@@ -46,10 +46,10 @@ export function Hero() {
             className="max-w-3xl"
           >
             <p className="mb-4 inline-flex rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm uppercase tracking-[0.3em] text-brand-200 shadow-soft">
-              Luxury serviced accommodation in Leeds
+              Well-presented home in Leeds
             </p>
             <h1 className="text-5xl font-semibold leading-tight lg:text-6xl">
-              Luxury 4 Bedroom Stay in Leeds
+              Stylish 4-Bedroom Stay in Leeds
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-brand-100/90">
               Sleeps 8 • Free Parking • Fast WiFi • Near Elland Road. Book direct for the best rate and a boutique Leeds stay.

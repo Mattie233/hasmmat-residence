@@ -1,6 +1,6 @@
 # Hasmmat Residence
 
-Premium direct booking website for Hasmmat Residence, a luxury 4-bedroom serviced accommodation in Leeds.
+Stylish direct booking website for Hasmmat Residence, a well-presented 4-bedroom serviced accommodation in Leeds.
 
 ## Setup
 

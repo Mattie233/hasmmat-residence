@@ -8,12 +8,12 @@ import { galleryImages } from '@/lib/data';
 
 const features = [
   ['4 bedrooms', 'Private bedrooms give everyone space while keeping the whole group under one roof.'],
-  ['Sleeps up to 8 guests', 'A comfortable capacity for families, friends, work groups and visiting sports fans.'],
+  ['Sleeps up to 8 guests', 'A comfortable capacity for families and friends travelling together.'],
   ['Free parking', 'Off-street parking makes arrivals and day trips easier for guests travelling by car.'],
   ['Fast Wi-Fi', 'Reliable internet supports streaming, planning, video calls and working during your stay.'],
   ['Fully equipped kitchen', 'Prepare meals, store food and keep a familiar routine instead of relying on restaurants.'],
   ['Living and dining space', 'Shared areas make it easy for groups to relax, eat and spend time together.'],
-  ['3 workspaces/desks', 'Dedicated desk areas are useful for business travellers, contractors and remote work.'],
+  ['Shared spaces', 'Living, dining and kitchen areas give the whole group room to spend time together.'],
   ['Washing facilities', 'Laundry facilities help make longer group stays more practical.'],
   ['Garden', 'The garden provides useful outdoor space during downtime between trips and activities.']
 ];
@@ -128,13 +128,13 @@ export default function GroupAccommodationLeedsPage() {
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
-                  href="/#booking"
+                  href="/enquire#booking"
                   className="inline-flex items-center justify-center rounded-full bg-brand-400 px-7 py-3 text-sm font-semibold text-white transition hover:bg-brand-300"
                 >
                   Check Availability
                 </a>
                 <a
-                  href="/#contact"
+                  href="/enquire#contact"
                   className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3 text-sm font-semibold text-brand-100 transition hover:border-brand-300 hover:text-white"
                 >
                   Book Direct
@@ -183,7 +183,7 @@ export default function GroupAccommodationLeedsPage() {
             <p className="text-sm uppercase tracking-[0.25em] text-brand-300">Stay together in one Leeds property</p>
             <h2 className="mt-4 text-3xl font-semibold text-white">More room and shared space than several separate hotel rooms.</h2>
             <p className="mt-5 leading-8 text-brand-200">
-              Booking one home gives families, friends and work groups a shared kitchen, dining area and living room alongside private bedrooms. It makes meals, planning and downtime easier, while keeping everyone close together throughout the stay.
+              Booking one home gives families and friends a shared kitchen, dining area and living room alongside private bedrooms. It makes meals and downtime easier, while keeping everyone close together throughout the stay.
             </p>
             <p className="mt-4 leading-8 text-brand-200">
               For guests comparing places to stay in Leeds for groups, Hasmmat Residence offers the convenience of one well-equipped property in Beeston rather than coordinating multiple hotel rooms.
@@ -209,7 +209,7 @@ export default function GroupAccommodationLeedsPage() {
           </p>
           <h2 className="text-3xl font-semibold text-white sm:text-4xl">Everything your group needs</h2>
           <p className="mt-5 leading-8 text-brand-200">
-            This large group accommodation in Leeds is set up for comfortable short visits and longer stays, with space to relax, work, cook and settle in.
+            This group accommodation in Leeds is set up for comfortable visits, with space to relax, cook and settle in together.
           </p>
         </div>
         <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -227,7 +227,7 @@ export default function GroupAccommodationLeedsPage() {
         <div className="grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
             <p className="text-sm uppercase tracking-[0.25em] text-brand-300">Great location in South Leeds</p>
-            <h2 className="mt-4 text-3xl font-semibold text-white">A convenient Beeston base for exploring and working in Leeds.</h2>
+            <h2 className="mt-4 text-3xl font-semibold text-white">A convenient Beeston base for exploring Leeds together.</h2>
             <p className="mt-5 leading-8 text-brand-200">
               Hasmmat Residence is located in Beeston, South Leeds, with straightforward routes to Elland Road, Leeds city centre and surrounding Leeds areas. It is approximately 6 minutes from Elland Road and approximately 11 minutes from Leeds city centre by car, depending on traffic.
             </p>
@@ -262,10 +262,10 @@ export default function GroupAccommodationLeedsPage() {
           {[
             ['Families', 'Keep everyone together with bedrooms, shared meals and room to relax between days out in Leeds.'],
             ['Friends', 'Enjoy a comfortable base for a city break, local attractions, dining and sporting visits.'],
-            ['Business travellers', 'Use the Wi-Fi, kitchen and dedicated desks to balance work with a more comfortable stay.'],
-            ['Work teams', 'Shared facilities and separate bedrooms make arrangements straightforward for small teams.'],
-            ['Contractors', 'Practical South Leeds accommodation with parking, washing facilities and space for longer stays.'],
-            ['Sporting event guests', 'Stay approximately 6 minutes from Elland Road with enough space for the whole group.']
+            ['Family groups', 'Keep everyone together with bedrooms, shared meals and room to relax between days out.'],
+            ['Friends travelling together', 'Enjoy a comfortable base for a city break, local attractions, dining and sporting visits.'],
+            ['Matchday groups', 'Stay approximately 6 minutes from Elland Road with enough space for the whole group.'],
+            ['Leeds visits', 'Use the kitchen, living space and parking to make the group trip straightforward.']
           ].map(([title, description]) => (
             <div key={title} className="rounded-[2rem] border border-white/10 bg-black/40 p-6 shadow-soft backdrop-blur-xl">
               <h3 className="text-xl font-semibold text-white">{title}</h3>
@@ -285,10 +285,10 @@ export default function GroupAccommodationLeedsPage() {
             </p>
           </div>
           <div className="rounded-[2.5rem] border border-white/10 bg-brand-950/80 p-8 shadow-soft backdrop-blur-xl">
-            <p className="text-sm uppercase tracking-[0.25em] text-brand-300">Travelling for work?</p>
-            <h2 className="mt-4 text-3xl font-semibold text-white">A practical base for teams and longer assignments.</h2>
+            <p className="text-sm uppercase tracking-[0.25em] text-brand-300">Planning your group visit?</p>
+            <h2 className="mt-4 text-3xl font-semibold text-white">Share your dates and guest details.</h2>
             <p className="mt-5 leading-8 text-brand-200">
-              Contractors and project teams can explore our <Link href="/contractor-accommodation-leeds" className="font-semibold text-brand-300 underline decoration-brand-300/40 underline-offset-4 hover:text-white">contractor accommodation in Leeds</Link> page for work-ready stay information.
+              Send an enquiry with the number of guests and length of stay so the host can confirm the right arrangement.
             </p>
           </div>
         </div>
@@ -304,13 +304,13 @@ export default function GroupAccommodationLeedsPage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <a
-                href="/#booking"
+                href="/enquire#booking"
                 className="inline-flex items-center justify-center rounded-full bg-brand-400 px-7 py-3 text-sm font-semibold text-white transition hover:bg-brand-300"
               >
                 Check Availability
               </a>
               <a
-                href="/#contact"
+                href="/enquire#contact"
                 className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3 text-sm font-semibold text-brand-100 transition hover:border-brand-300 hover:text-white"
               >
                 Send an Enquiry

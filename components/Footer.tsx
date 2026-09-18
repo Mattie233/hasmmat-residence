@@ -9,25 +9,25 @@ export function Footer() {
         <div>
           <p className="text-sm uppercase tracking-[0.22em] text-brand-300">Hasmmat Residence</p>
           <p className="mt-4 max-w-sm text-sm leading-7">
-            Premium serviced accommodation in Leeds, crafted for families, contractors, groups and football fans.
+            High-quality serviced accommodation in Leeds, crafted for families, contractors, groups and football fans.
           </p>
         </div>
         <div>
           <p className="text-sm uppercase tracking-[0.22em] text-brand-300">Quick Links</p>
           <ul className="mt-4 space-y-3 text-sm text-brand-200">
-            <li>Home</li>
-            <li>Gallery</li>
-            <li>Amenities</li>
-            <li>Location</li>
+            <li><a href="/" className="transition hover:text-white">Home</a></li>
+            <li><a href="/accommodation" className="transition hover:text-white">Accommodation</a></li>
+            <li><a href="/location" className="transition hover:text-white">Location</a></li>
+            <li><a href="/faqs" className="transition hover:text-white">FAQs</a></li>
           </ul>
         </div>
         <div>
           <p className="text-sm uppercase tracking-[0.22em] text-brand-300">Policies</p>
           <ul className="mt-4 space-y-3 text-sm text-brand-200">
-            <li><a href="#policies" className="transition hover:text-white">Terms & Conditions</a></li>
-            <li><a href="#policies" className="transition hover:text-white">House Rules</a></li>
-            <li><a href="#policies" className="transition hover:text-white">Cancellation Policy</a></li>
-            <li><a href="#contact" className="transition hover:text-white">Direct Enquiry</a></li>
+            <li><a href="/house-rules" className="transition hover:text-white">Terms & Conditions</a></li>
+            <li><a href="/house-rules" className="transition hover:text-white">House Rules</a></li>
+            <li><a href="/house-rules" className="transition hover:text-white">Cancellation Policy</a></li>
+            <li><a href="/enquire" className="transition hover:text-white">Direct Enquiry</a></li>
           </ul>
         </div>
       </div>

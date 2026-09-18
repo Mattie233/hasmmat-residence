@@ -19,9 +19,9 @@ export function Amenities() {
     <section id="amenities" className="container py-24">
       <div className="mx-auto max-w-3xl text-center">
         <p className="mb-4 inline-flex rounded-full border border-brand-300/20 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.27em] text-brand-200">
-          Premium amenities
+          Thoughtfully selected amenities
         </p>
-        <h2 className="text-4xl font-semibold text-white">Designed for premium comfort and seamless stays</h2>
+          <h2 className="text-4xl font-semibold text-white">Designed for exceptional comfort and seamless stays</h2>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-brand-200">
           A complete serviced accommodation experience for families, contractors, professionals and groups visiting Leeds.
         </p>

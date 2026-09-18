@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { FloatingCTA } from '@/components/FloatingCTA';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
@@ -20,12 +19,12 @@ const faqs = [
     answer: 'Yes. Free off-street parking is available at the property for guests.'
   },
   {
-    question: 'Is the property suitable for groups?',
-    answer: 'Yes. Multiple bedrooms, a shared kitchen and living space make the property suitable for groups who want to stay together.'
+    question: 'Is the property suitable for family stays?',
+    answer: 'Yes. Multiple bedrooms, a shared kitchen and living space give families room to stay together comfortably.'
   },
   {
     question: 'Is Wi-Fi included?',
-    answer: 'Yes. Fast Wi-Fi is included, with workspaces and desks that are useful for business travellers and longer stays.'
+    answer: 'Yes. Fast Wi-Fi is included for family planning, entertainment and staying connected during your visit.'
   },
   {
     question: 'Can I book directly?',
@@ -36,8 +35,8 @@ const faqs = [
     answer: 'Leeds city centre is approximately 11 minutes away by car, although journey times vary with traffic and travel conditions.'
   },
   {
-    question: 'Is the property only suitable for football stays?',
-    answer: 'No. The property also suits families, groups, contractors, business travellers and guests looking for a short stay or longer visit in Leeds.'
+    question: 'Is the property suitable for family stays?',
+    answer: 'Yes. The four bedrooms, kitchen, shared living space, parking and nearby attractions make it a practical choice for families visiting Leeds.'
   }
 ];
 
@@ -108,7 +107,7 @@ export default function AccommodationNearEllandRoadPage() {
                 Accommodation Near Elland Road, Leeds
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-8 text-brand-100/90">
-                Stay in a spacious 4-bedroom property close to Elland Road, with room for up to 8 guests. Hasmmat Residence suits football visitors, groups, families, contractors and business travellers looking for a comfortable base in Leeds.
+                Stay in a spacious 4-bedroom property close to Elland Road, with room for up to 8 guests. Hasmmat Residence gives families a comfortable base for visiting Leeds, local attractions and matchday events.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
@@ -153,7 +152,7 @@ export default function AccommodationNearEllandRoadPage() {
               <div className="border-t border-white/10 bg-black/60 p-5">
                 <p className="text-xs uppercase tracking-[0.22em] text-brand-300">A comfortable base for Leeds visits</p>
                 <p className="mt-3 text-base leading-7 text-brand-100/90">
-                  Shared living and dining space, a fully equipped kitchen, fast Wi-Fi and free parking make group stays straightforward.
+                  Shared living and dining space, a fully equipped kitchen, fast Wi-Fi and free parking make family stays straightforward.
                 </p>
               </div>
             </div>
@@ -165,9 +164,9 @@ export default function AccommodationNearEllandRoadPage() {
         <div className="grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="rounded-[2rem] border border-white/10 bg-black/40 p-7 shadow-soft backdrop-blur-xl">
             <p className="text-sm uppercase tracking-[0.25em] text-brand-300">Stay close to Elland Road</p>
-            <h2 className="mt-4 text-3xl font-semibold text-white">A practical base for matchdays, events and work nearby.</h2>
+            <h2 className="mt-4 text-3xl font-semibold text-white">A practical base for family visits, matchdays and local days out.</h2>
             <p className="mt-5 leading-8 text-brand-200">
-              Hasmmat Residence is approximately 6 minutes from Elland Road, so guests attending a Leeds United match or event can stay close to the stadium without giving up the space of a whole home. It is also convenient for people working in the area and visitors planning a short stay in Leeds.
+              Hasmmat Residence is approximately 6 minutes from Elland Road, so families attending a match or event can stay close to the stadium without giving up the space of a whole home. White Rose Shopping Centre is approximately a 7-minute drive away for shopping, food and family activities.
             </p>
             <p className="mt-4 leading-8 text-brand-200">
               This is independent accommodation near Elland Road and is not affiliated with or endorsed by Leeds United.
@@ -189,21 +188,21 @@ export default function AccommodationNearEllandRoadPage() {
       <section className="container py-20">
         <div className="mx-auto max-w-3xl text-center">
           <p className="mb-4 inline-flex rounded-full border border-brand-300/20 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.25em] text-brand-200">
-            Ideal for groups and matchday stays
+            Comfortable family stays near Elland Road
           </p>
           <h2 className="text-3xl font-semibold text-white sm:text-4xl">Stay together instead of booking multiple hotel rooms.</h2>
           <p className="mt-5 leading-8 text-brand-200">
-            The property gives groups up to 8 a shared base with the privacy of multiple bedrooms and the ease of cooking, relaxing and planning together.
+            The property gives families up to 8 guests a shared base with the privacy of multiple bedrooms and the ease of cooking, relaxing and planning together.
           </p>
         </div>
         <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {[
-            ['Multiple bedrooms', 'Four bedrooms give families, friends and work groups room to settle in comfortably.'],
-            ['Shared kitchen and living space', 'Cook together, eat together and unwind in a proper home rather than separate hotel rooms.'],
-            ['Parking and fast Wi-Fi', 'Free parking supports matchday arrivals, while reliable Wi-Fi helps with streaming, calls and work.'],
-            ['Practical location', 'Beeston in South Leeds gives straightforward access to Elland Road, the city centre and local shops.'],
-            ['Flexible for different stays', 'Suitable for football visitors, families, contractors, business travellers and longer stays.'],
-            ['A home for the group', 'Keep the trip simple with one comfortable property for everyone to share.']
+            ['Multiple bedrooms', 'Four bedrooms give families room to settle in comfortably.'],
+            ['Shared kitchen and living space', 'Cook together, eat together and unwind in a proper home.'],
+            ['Parking and fast Wi-Fi', 'Free parking supports arrivals, while reliable Wi-Fi helps with entertainment and planning.'],
+            ['Nearby family activities', 'Beeston in South Leeds gives straightforward access to Elland Road, White Rose and local shops.'],
+            ['Space for up to 8', 'Keep the family together across four bedrooms and shared spaces.'],
+            ['A comfortable home base', 'Enjoy a practical property for family visits to Leeds.']
           ].map(([title, description]) => (
             <div key={title} className="rounded-[2rem] border border-white/10 bg-black/40 p-6 shadow-soft backdrop-blur-xl">
               <h3 className="text-xl font-semibold text-white">{title}</h3>
@@ -219,7 +218,7 @@ export default function AccommodationNearEllandRoadPage() {
             <p className="text-sm uppercase tracking-[0.25em] text-brand-300">Convenient South Leeds location</p>
             <h2 className="mt-4 text-3xl font-semibold text-white">Beeston accommodation Leeds guests can use as a city base.</h2>
             <p className="mt-5 leading-8 text-brand-200">
-              Located in Beeston, South Leeds, Hasmmat Residence offers easy access to Elland Road, local shops, public transport and surrounding parts of Leeds. Leeds city centre is approximately 11 minutes away by car, depending on traffic.
+              Located in Beeston, South Leeds, Hasmmat Residence offers families easy access to Elland Road, White Rose Shopping Centre, local shops and public transport. Leeds city centre is approximately 11 minutes away by car, depending on traffic.
             </p>
             <ul className="mt-6 space-y-3 text-brand-100/90">
               <li>• Approximately 6 minutes from Elland Road</li>
@@ -245,15 +244,15 @@ export default function AccommodationNearEllandRoadPage() {
         <div className="rounded-[2.5rem] border border-white/10 bg-brand-950/80 p-8 shadow-soft backdrop-blur-xl">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>
-              <p className="text-sm uppercase tracking-[0.25em] text-brand-300">More than just matchday accommodation</p>
-              <h2 className="mt-4 text-3xl font-semibold text-white">A flexible home for work, family visits and longer stays.</h2>
+              <p className="text-sm uppercase tracking-[0.25em] text-brand-300">A comfortable family base</p>
+              <h2 className="mt-4 text-3xl font-semibold text-white">More space for family visits to Leeds.</h2>
             </div>
             <div className="space-y-5 text-brand-200">
               <p className="leading-8">
-                Alongside Leeds football accommodation, the property works well for contractors, business travellers, families and groups who need practical short stay Leeds accommodation or a longer base.
+                Alongside its location near Elland Road, the property gives families the space and facilities needed for a practical short stay in Leeds.
               </p>
               <p className="leading-8">
-                For project teams, explore our <Link href="/contractor-accommodation-leeds" className="font-semibold text-brand-300 underline decoration-brand-300/40 underline-offset-4 hover:text-white">contractor accommodation in Leeds</Link> page for more details about work-ready stays.
+                White Rose Shopping Centre is approximately a 7-minute drive away, and Leeds city centre is approximately 11 minutes away by car, depending on traffic.
               </p>
             </div>
           </div>
@@ -270,16 +269,16 @@ export default function AccommodationNearEllandRoadPage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <a
-                href="/#booking"
+                href="/enquire#booking"
                 className="inline-flex items-center justify-center rounded-full bg-brand-400 px-7 py-3 text-sm font-semibold text-white transition hover:bg-brand-300"
               >
                 Check Availability
               </a>
               <a
-                href="/#contact"
+                href="/enquire#contact"
                 className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3 text-sm font-semibold text-brand-100 transition hover:border-brand-300 hover:text-white"
               >
-                Book Direct
+                Send an Enquiry
               </a>
             </div>
           </div>

@@ -137,13 +137,13 @@ export default function ContractorAccommodationLeedsPage() {
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
-                  href="/#booking"
+                  href="/enquire#booking"
                   className="inline-flex items-center justify-center rounded-full bg-brand-400 px-7 py-3 text-sm font-semibold text-white transition hover:bg-brand-300"
                 >
                   Check Availability
                 </a>
                 <a
-                  href="/#contact"
+                  href="/enquire#contact"
                   className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3 text-sm font-semibold text-brand-100 transition hover:border-brand-300 hover:text-white"
                 >
                   Get a Contractor Quote
@@ -178,7 +178,7 @@ export default function ContractorAccommodationLeedsPage() {
               <div className="border-t border-white/10 bg-black/60 p-5">
                 <p className="text-xs uppercase tracking-[0.22em] text-brand-300">Why it works for contractors</p>
                 <p className="mt-3 text-base leading-7 text-brand-100/90">
-                  Private bedrooms, shared family space, reliable internet and straightforward direct booking for longer stays.
+                  Private bedrooms, shared living space, reliable internet and straightforward enquiries for longer stays.
                 </p>
               </div>
             </div>
@@ -306,7 +306,7 @@ export default function ContractorAccommodationLeedsPage() {
             </ul>
             <div className="mt-8 flex flex-wrap gap-4">
               <a
-                href="/#contact"
+                href="/enquire#contact"
                 className="inline-flex items-center justify-center rounded-full bg-brand-400 px-7 py-3 text-sm font-semibold text-white transition hover:bg-brand-300"
               >
                 Provide your dates and guest details

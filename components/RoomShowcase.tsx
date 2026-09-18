@@ -13,7 +13,7 @@ export function RoomShowcase() {
         </p>
         <h2 className="text-4xl font-semibold text-white">Spaces crafted for work, rest and memorable group stays</h2>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-brand-200">
-          Each area of the house is styled for premium comfort, from cosy bedrooms to smart entertainment zones.
+          Each area of the house is styled for exceptional comfort, from cosy bedrooms to smart entertainment zones.
         </p>
       </div>
 

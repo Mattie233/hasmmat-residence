@@ -9,7 +9,7 @@ export function AboutSection() {
         <p className="mb-4 inline-flex rounded-full border border-brand-300/20 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.27em] text-brand-200">
           About Hasmmat Residence
         </p>
-        <h2 className="text-4xl font-semibold text-white">Family-run hosting with premium standards and local Leeds expertise</h2>
+        <h2 className="text-4xl font-semibold text-white">Family-run hosting with high standards and local Leeds expertise</h2>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-brand-200">
           We blend boutique hospitality with the convenience of serviced accommodation to deliver clean, elevated stays in every season.
         </p>

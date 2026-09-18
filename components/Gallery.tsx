@@ -29,7 +29,7 @@ export function Gallery() {
         </p>
         <h2 className="text-4xl font-semibold text-white">A visual story of space, design and comfort.</h2>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-brand-200">
-          Explore the rooms and shared spaces with elegant layouts, premium finishes, and warm hospitality styling.
+          Explore the rooms and shared spaces with elegant layouts, refined finishes, and warm hospitality styling.
         </p>
       </div>
 

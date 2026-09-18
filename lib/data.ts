@@ -2,11 +2,11 @@ const propertyImage = (fileName: string) => `/images/hasmmatres62/${fileName}`;
 
 export const siteInfo = {
   name: 'Hasmmat Residence',
-  tagline: 'Premium stays in Leeds for families, contractors & city visitors.',
+  tagline: 'Stylish stays in Leeds for families, contractors & city visitors.',
   shortDescription:
-    'Luxury 4-bedroom house with flexible stays, fast WiFi, free parking, and direct-book savings near Elland Road.',
+    'Well-presented 4-bedroom house with flexible stays, fast WiFi, free parking, and direct-book savings near Elland Road.',
   ctaText: 'Book Direct',
-  bookingNotice: 'Secure your premium stay with direct booking discounts and fast check-out.',
+  bookingNotice: 'Secure your comfortable stay with direct booking discounts and fast check-out.',
   email: 'hasmmatresidence@yahoo.com',
   phone: '+44 7983818344',
   whatsappUrl: 'https://wa.me/447983818344',
@@ -22,7 +22,7 @@ export const siteInfo = {
 
 export const heroSlides = [
   {
-    title: 'Luxury 4 Bedroom Stay in Leeds',
+    title: 'Stylish 4-Bedroom Stay in Leeds',
     subtitle: 'Sleeps 8 • Free Parking • Fast WiFi • Near Elland Road',
     image: propertyImage('PHOTO-2026-04-11-00-10-02_4.jpg')
   },
@@ -33,7 +33,7 @@ export const heroSlides = [
   },
   {
     title: 'Direct Booking, Best Rates',
-    subtitle: 'No marketplace fees. Flexible stays with premium service.',
+    subtitle: 'No marketplace fees. Flexible stays with attentive service.',
     image: propertyImage('image0.jpeg')
   }
 ];
@@ -41,7 +41,7 @@ export const heroSlides = [
 export const galleryImages = [
   {
     category: 'Living Room',
-    title: 'Designer lounge',
+    title: 'Lounge',
     src: propertyImage('image1.jpeg')
   },
   {
@@ -89,14 +89,14 @@ export const amenities = [
   { title: 'Washing Machine', description: 'Laundry support for family and contractor stays.' },
   { title: 'Free Parking', description: 'Secure off-street parking included.' },
   { title: 'Self Check-in', description: 'Contactless arrival with key safe access.' },
-  { title: 'Fresh Linen', description: 'Luxury bedding and premium towels provided.' }
+  { title: 'Fresh Linen', description: 'Quality bedding and soft towels provided.' }
 ];
 
 export const roomShowcase = [
   {
     title: 'Master Bedroom',
     description:
-      'King-size bed, plush linens, smart lighting, premium blackout curtains for restful stays.',
+      'King-size bed, plush linens, smart lighting, quality blackout curtains for restful stays.',
     image: propertyImage('PHOTO-2026-04-11-00-10-02_14.jpg')
   },
   {
@@ -133,7 +133,7 @@ export const reviews = [
   {
     author: 'Olivia T.',
     rating: 5,
-    feedback: 'Luxury finish, fast WiFi, and the host was very responsive. Would book again.'
+    feedback: 'Refined finish, fast WiFi, and the host was very responsive. Would book again.'
   }
 ];
 
@@ -155,7 +155,7 @@ export const faqs = [
   },
   {
     question: 'Can I bring children or pets?',
-    answer: 'Families are welcome. Pets are not permitted to preserve luxury standards and cleanliness.'
+    answer: 'Families are welcome. Pets are not permitted to maintain high standards of comfort and cleanliness.'
   },
   {
     question: 'What is your cancellation policy?',
