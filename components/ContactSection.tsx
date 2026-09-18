@@ -2,7 +2,12 @@
 
 import { type FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BOOKING_REQUEST_EVENT, type BookingRequestDetail } from '@/lib/bookingRequest';
+import {
+  BOOKING_REQUEST_EVENT,
+  SELECTED_DATES_EVENT,
+  type BookingRequestDetail,
+  type SelectedDatesDetail,
+} from '@/lib/bookingRequest';
 import { siteInfo } from '@/lib/data';
 import type { BookingType } from '@/types';
 
@@ -23,6 +28,11 @@ export function ContactSection() {
   const [statusTone, setStatusTone] = useState<'success' | 'error'>('success');
 
   useEffect(() => {
+    const handleSelectedDates = (event: Event) => {
+      const { checkIn, checkOut } = (event as CustomEvent<SelectedDatesDetail>).detail;
+      setDates(checkOut ? `${checkIn} to ${checkOut}` : checkIn);
+    };
+
     const handleBookingRequest = (event: Event) => {
       const { checkIn, checkOut, guests, nights, bookingType, total, savingsLabel } = (
         event as CustomEvent<BookingRequestDetail>
@@ -49,8 +59,12 @@ export function ContactSection() {
       );
     };
 
+    window.addEventListener(SELECTED_DATES_EVENT, handleSelectedDates);
     window.addEventListener(BOOKING_REQUEST_EVENT, handleBookingRequest);
-    return () => window.removeEventListener(BOOKING_REQUEST_EVENT, handleBookingRequest);
+    return () => {
+      window.removeEventListener(SELECTED_DATES_EVENT, handleSelectedDates);
+      window.removeEventListener(BOOKING_REQUEST_EVENT, handleBookingRequest);
+    };
   }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

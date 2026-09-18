@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { usePricing } from '@/hooks/usePricing';
 import {
   BOOKING_REQUEST_EVENT,
+  SELECTED_DATES_EVENT,
   type BookingConfirmationRequest,
   type BookingRequestDetail,
   type GuestBookingDetails,
@@ -186,6 +187,7 @@ export function BookingSection() {
       }
 
       setActiveDateField('checkOut');
+      window.dispatchEvent(new CustomEvent(SELECTED_DATES_EVENT, { detail: { checkIn: selectedKey, checkOut: '' } }));
       return;
     }
 
@@ -193,11 +195,13 @@ export function BookingSection() {
       setCheckIn(selectedKey);
       setCheckOut('');
       setActiveDateField('checkOut');
+      window.dispatchEvent(new CustomEvent(SELECTED_DATES_EVENT, { detail: { checkIn: selectedKey, checkOut: '' } }));
       return;
     }
 
     setCheckOut(selectedKey);
     setActiveDateField('checkIn');
+    window.dispatchEvent(new CustomEvent(SELECTED_DATES_EVENT, { detail: { checkIn, checkOut: selectedKey } }));
   };
 
   const handleBookingRequest = () => {
