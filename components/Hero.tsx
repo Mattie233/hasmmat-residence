@@ -56,13 +56,13 @@ export function Hero() {
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <a
-                href="#booking"
+                href="/enquire#booking"
                 className="inline-flex items-center justify-center rounded-full bg-brand-400 px-7 py-3 text-sm font-semibold text-white transition hover:bg-brand-300"
               >
                 Book Direct
               </a>
               <a
-                href="#gallery"
+                href="/accommodation#gallery"
                 className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-3 text-sm text-brand-100 transition hover:border-brand-300 hover:text-white"
               >
                 View Gallery
