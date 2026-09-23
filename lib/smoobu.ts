@@ -1,57 +1,99 @@
+import { createHash, createHmac, randomUUID } from 'node:crypto';
 import { SmoobuAvailabilityRequest, SmoobuAvailabilityResponse, SmoobuRatesResponse } from '@/types';
+import { getSmoobuEnv } from '@/lib/env';
 
-const SMOOBU_AVAILABILITY_URL = 'https://login.smoobu.com/booking/checkApartmentAvailability';
-const SMOOBU_RATES_URL = 'https://login.smoobu.com/api/rates';
+type SmoobuRequestOptions = {
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  query?: URLSearchParams;
+  body?: unknown;
+};
 
-export async function checkSmoobuAvailability(
-  apiKey: string,
-  request: SmoobuAvailabilityRequest,
-): Promise<SmoobuAvailabilityResponse> {
-  const response = await fetch(SMOOBU_AVAILABILITY_URL, {
-    method: 'POST',
+function canonicalQuery(query: URLSearchParams) {
+  return [...query.entries()]
+    .sort(([firstKey, firstValue], [secondKey, secondValue]) =>
+      firstKey === secondKey ? firstValue.localeCompare(secondValue) : firstKey.localeCompare(secondKey),
+    )
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+}
+
+export async function smoobuRequest<T>(path: string, options: SmoobuRequestOptions = {}): Promise<T> {
+  const { SMOOBU_API_KEY, SMOOBU_API_SECRET } = getSmoobuEnv();
+  const method = options.method || 'GET';
+  const query = options.query || new URLSearchParams();
+  const body = options.body === undefined ? '' : JSON.stringify(options.body);
+  const timestamp = new Date().toISOString();
+  const nonce = randomUUID();
+  const bodyHash = createHash('sha256').update(body, 'utf8').digest('hex');
+  const canonicalString = [method, path, canonicalQuery(query), timestamp, nonce, bodyHash, SMOOBU_API_KEY].join('\n');
+  const signature = createHmac('sha256', SMOOBU_API_SECRET).update(canonicalString, 'utf8').digest('base64');
+  const url = new URL(path, 'https://login.smoobu.com');
+  url.search = query.toString();
+
+  const response = await fetch(url, {
+    method,
     headers: {
-      'Api-Key': apiKey,
+      'X-API-Key': SMOOBU_API_KEY,
+      'X-Timestamp': timestamp,
+      'X-Nonce': nonce,
+      'X-Signature': signature,
       'Cache-Control': 'no-cache',
-      'Content-Type': 'application/json',
+      ...(options.body === undefined ? {} : { 'Content-Type': 'application/json' }),
     },
-    body: JSON.stringify(request),
+    ...(options.body === undefined ? {} : { body }),
     cache: 'no-store',
   });
 
-  const data = (await response.json()) as SmoobuAvailabilityResponse;
-
-  if (!response.ok) {
-    throw new Error(data.detail || data.title || `Smoobu request failed with status ${response.status}`);
+  const responseText = await response.text();
+  let data: T | { detail?: string; title?: string } = {};
+  try {
+    data = responseText ? (JSON.parse(responseText) as T) : {};
+  } catch {
+    data = { detail: responseText };
   }
 
-  return data;
+  if (!response.ok) {
+    const error = data as { detail?: string; title?: string };
+    console.error('Smoobu request failed', {
+      status: response.status,
+      endpoint: path,
+      error: error.detail || error.title || 'Unknown Smoobu error',
+    });
+    throw new Error(error.detail || error.title || `Smoobu request failed with status ${response.status}`);
+  }
+
+  return data as T;
+}
+
+export async function checkSmoobuAvailability(
+  request: SmoobuAvailabilityRequest,
+): Promise<SmoobuAvailabilityResponse> {
+  return smoobuRequest<SmoobuAvailabilityResponse>('/booking/checkApartmentAvailability', {
+    method: 'POST',
+    body: request,
+  });
 }
 
 export async function getSmoobuRates(
-  apiKey: string,
   apartmentId: number,
   startDate: string,
   endDate: string,
 ): Promise<SmoobuRatesResponse> {
-  const url = new URL(SMOOBU_RATES_URL);
-  url.searchParams.set('start_date', startDate);
-  url.searchParams.set('end_date', endDate);
-  url.searchParams.append('apartments[]', `${apartmentId}`);
+  const query = new URLSearchParams();
+  query.set('start_date', startDate);
+  query.set('end_date', endDate);
+  query.append('apartments[]', `${apartmentId}`);
 
-  const response = await fetch(url, {
+  return smoobuRequest<SmoobuRatesResponse>('/api/rates', {
     method: 'GET',
-    headers: {
-      'Api-Key': apiKey,
-      'Cache-Control': 'no-cache',
-    },
-    cache: 'no-store',
+    query,
   });
+}
 
-  const data = (await response.json()) as SmoobuRatesResponse;
+export type SmoobuApartmentsResponse = {
+  apartments?: Array<{ id: number; name: string }>;
+};
 
-  if (!response.ok) {
-    throw new Error(data.detail || data.title || `Smoobu rates request failed with status ${response.status}`);
-  }
-
-  return data;
+export function getSmoobuApartments() {
+  return smoobuRequest<SmoobuApartmentsResponse>('/api/apartments');
 }

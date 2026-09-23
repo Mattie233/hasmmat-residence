@@ -51,7 +51,7 @@ function getDiscount(checkIn: string, nights: number, bookingType: BookingType) 
 
 export async function POST(request: Request) {
   try {
-    const { SMOOBU_API_KEY, SMOOBU_CUSTOMER_ID, SMOOBU_APARTMENT_ID } = getSmoobuEnv();
+    const { SMOOBU_CUSTOMER_ID, SMOOBU_APARTMENT_ID } = getSmoobuEnv();
     const body = (await request.json()) as PricingRequest;
     const { checkIn, checkOut, guests, bookingType, listingId } = body;
     const apartmentId = Number(listingId || SMOOBU_APARTMENT_ID);
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Check-out must be after check-in.' }, { status: 400 });
     }
 
-    const response = await checkSmoobuAvailability(SMOOBU_API_KEY, {
+    const response = await checkSmoobuAvailability({
       arrivalDate: checkIn,
       departureDate: checkOut,
       apartments: [apartmentId],

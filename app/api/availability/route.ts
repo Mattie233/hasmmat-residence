@@ -41,7 +41,7 @@ function eachDate(startDate: Date, endDate: Date) {
 
 export async function GET(request: Request) {
   try {
-    const { SMOOBU_API_KEY, SMOOBU_APARTMENT_ID } = getSmoobuEnv();
+    const { SMOOBU_APARTMENT_ID } = getSmoobuEnv();
     const { searchParams } = new URL(request.url);
     const startDate = parseDate(searchParams.get('startDate'));
     const endDate = parseDate(searchParams.get('endDate'));
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Availability range must be between 1 and 63 days.' }, { status: 400 });
     }
 
-    const rates = await getSmoobuRates(SMOOBU_API_KEY, apartmentId, toDateKey(startDate), toDateKey(addDays(endDate, 1)));
+    const rates = await getSmoobuRates(apartmentId, toDateKey(startDate), toDateKey(addDays(endDate, 1)));
     const apartmentRates = rates.data?.[`${apartmentId}`] || {};
 
     const body: CalendarAvailabilityResponse = {
