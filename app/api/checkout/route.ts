@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { BookingRequestDetail, GuestBookingDetails } from '@/lib/bookingRequest';
 import { siteInfo } from '@/lib/data';
+import { getSmoobuEnv } from '@/lib/env';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +28,7 @@ function metadataText(value: string | undefined, fallback: string) {
 export async function POST(request: Request) {
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    const { SMOOBU_APARTMENT_ID } = getSmoobuEnv();
     const body = (await request.json()) as CheckoutRequest;
     const {
       checkIn,
@@ -89,6 +91,7 @@ export async function POST(request: Request) {
     params.set('metadata[guestPhone]', metadataText(guestPhone, 'Not provided'));
     params.set('metadata[guestAddress]', metadataText(guestAddress, 'Not provided'));
     params.set('metadata[specialRequests]', metadataText(specialRequests, 'None'));
+    params.set('metadata[apartmentId]', `${SMOOBU_APARTMENT_ID}`);
 
     params.set('customer_email', guestEmail.trim());
 

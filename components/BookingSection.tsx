@@ -467,6 +467,20 @@ export function BookingSection() {
               </div>
             </div>
 
+            <div className="rounded-[2rem] bg-brand-900/80 p-6 text-white">
+              <div className="flex items-center justify-between text-sm uppercase tracking-[0.2em] text-brand-300">
+                <span>Total price</span>
+                <span>Booking confirmation</span>
+              </div>
+              <p className="mt-4 text-4xl font-semibold">
+                {loading ? 'Loading...' : `£${pricing?.totalAfterDiscount?.toFixed(0) ?? '0'}`}
+              </p>
+              <p className="mt-3 text-sm leading-6 text-brand-200">
+                Booking for {guests} guest{guests !== 1 ? 's' : ''} across {nights || '0'} night{nights !== 1 ? 's' : ''}.{' '}
+                Availability and price are checked before you send a request.
+              </p>
+            </div>
+
             <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-5">
               <p className="mb-4 text-sm uppercase tracking-[0.2em] text-brand-300">Guest details</p>
               <div className="grid gap-4">
@@ -582,20 +596,6 @@ export function BookingSection() {
                   </div>
                 ) : null}
               </div>
-            </div>
-
-            <div className="rounded-[2rem] bg-brand-900/80 p-6 text-white">
-              <div className="flex items-center justify-between text-sm uppercase tracking-[0.2em] text-brand-300">
-                <span>Total price</span>
-                <span>Booking confirmation</span>
-              </div>
-              <p className="mt-4 text-4xl font-semibold">
-                {loading ? 'Loading…' : `£${pricing?.totalAfterDiscount?.toFixed(0) ?? '0'}`}
-              </p>
-              <p className="mt-3 text-sm leading-6 text-brand-200">
-                Booking for {guests} guest{guests !== 1 ? 's' : ''} across {nights || '0'} night{nights !== 1 ? 's' : ''}.{' '}
-                Availability and price are checked before you send a request.
-              </p>
             </div>
 
             <button

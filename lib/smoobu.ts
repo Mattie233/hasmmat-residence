@@ -94,6 +94,44 @@ export type SmoobuApartmentsResponse = {
   apartments?: Array<{ id: number; name: string }>;
 };
 
+export type SmoobuReservationRequest = {
+  arrivalDate: string;
+  departureDate: string;
+  apartmentId: number;
+  channelId: number;
+  arrivalTime: string;
+  departureTime: string;
+  firstName: string;
+  lastName: string;
+  notice: string;
+  adults: number;
+  children: number;
+  price: number;
+  priceStatus: number;
+  address: {
+    street: string;
+    postalCode: string;
+    location: string;
+  };
+  country: string;
+  email: string;
+  phone: string;
+  language: string;
+};
+
+export type SmoobuReservationResponse = {
+  id?: number;
+  detail?: string;
+  title?: string;
+};
+
 export function getSmoobuApartments() {
   return smoobuRequest<SmoobuApartmentsResponse>('/api/apartments');
+}
+
+export function createSmoobuReservation(request: SmoobuReservationRequest) {
+  return smoobuRequest<SmoobuReservationResponse>('/api/reservations', {
+    method: 'POST',
+    body: request,
+  });
 }
