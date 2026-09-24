@@ -481,6 +481,37 @@ export function BookingSection() {
               </p>
             </div>
 
+            <div className="rounded-[2rem] bg-white/5 p-6">
+              <div className="flex items-center justify-between text-sm uppercase tracking-[0.2em] text-brand-300">
+                <span>Live availability</span>
+                <span>{pricing?.savingsLabel ?? 'Real-time rate update'}</span>
+              </div>
+              <div className="mt-5 space-y-4 text-brand-200">
+                <div className="flex items-center justify-between">
+                  <span>Stay price</span>
+                  <span>£{pricing ? pricing.rateTotal : '--'}</span>
+                </div>
+                {pricing?.cleaningFee ? (
+                  <div className="flex items-center justify-between">
+                    <span>Cleaning fee</span>
+                    <span>£{pricing.cleaningFee}</span>
+                  </div>
+                ) : null}
+                {pricing?.extraGuestFeeTotal ? (
+                  <div className="flex items-center justify-between text-emerald-300">
+                    <span>Extra guest fee</span>
+                    <span>£{pricing.extraGuestFeeTotal}</span>
+                  </div>
+                ) : null}
+                {pricing?.discountAmount ? (
+                  <div className="flex items-center justify-between text-emerald-300">
+                    <span>Direct booking discount ({Math.round(pricing.discountRate * 100)}%)</span>
+                    <span>-£{pricing.discountAmount}</span>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
             <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-5">
               <p className="mb-4 text-sm uppercase tracking-[0.2em] text-brand-300">Guest details</p>
               <div className="grid gap-4">
@@ -567,37 +598,6 @@ export function BookingSection() {
           className="rounded-[2rem] border border-white/10 bg-brand-950/90 p-8 shadow-soft backdrop-blur-xl"
         >
           <div className="space-y-6 text-brand-100">
-            <div className="rounded-[2rem] bg-white/5 p-6">
-              <div className="flex items-center justify-between text-sm uppercase tracking-[0.2em] text-brand-300">
-                <span>Live availability</span>
-                <span>{pricing?.savingsLabel ?? 'Real-time rate update'}</span>
-              </div>
-              <div className="mt-5 space-y-4 text-brand-200">
-                <div className="flex items-center justify-between">
-                  <span>Stay price</span>
-                  <span>£{pricing ? pricing.rateTotal : '--'}</span>
-                </div>
-                {pricing?.cleaningFee ? (
-                  <div className="flex items-center justify-between">
-                    <span>Cleaning fee</span>
-                    <span>£{pricing.cleaningFee}</span>
-                  </div>
-                ) : null}
-                {pricing?.extraGuestFeeTotal ? (
-                  <div className="flex items-center justify-between text-emerald-300">
-                    <span>Extra guest fee</span>
-                    <span>£{pricing.extraGuestFeeTotal}</span>
-                  </div>
-                ) : null}
-                {pricing?.discountAmount ? (
-                  <div className="flex items-center justify-between text-emerald-300">
-                    <span>Direct booking discount ({Math.round(pricing.discountRate * 100)}%)</span>
-                    <span>-£{pricing.discountAmount}</span>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-
             <button
               onClick={handleBookingRequest}
               disabled={!pricing?.valid || loading}
