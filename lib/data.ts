@@ -7,7 +7,7 @@ export const siteInfo = {
     'Well-presented 4-bedroom house with flexible stays, fast WiFi, free parking, and direct-book savings near Elland Road.',
   ctaText: 'Book Direct',
   bookingNotice: 'Secure your comfortable stay with direct booking discounts and fast check-out.',
-  email: 'hasmmatresidence@yahoo.com',
+  email: 'bookings@hasmmatresidence.com',
   phone: '+44 7983818344',
   whatsappUrl: 'https://wa.me/447983818344',
   instagramUrl: 'https://www.instagram.com/',

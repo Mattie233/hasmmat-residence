@@ -26,8 +26,8 @@ SMOOBU_API_KEY=your_smoobu_api_key
 SMOOBU_CUSTOMER_ID=1705732
 SMOOBU_APARTMENT_ID=3264062
 RESEND_API_KEY=your_resend_api_key
-BOOKING_EMAIL_FROM="Hasmmat Residence <bookings@your-domain.com>"
-BOOKING_NOTIFICATION_EMAIL=hasmmatresidence@yahoo.com
+BOOKING_EMAIL_FROM="Hasmmat Residence <bookings@hasmmatresidence.com>"
+BOOKING_NOTIFICATION_EMAIL=bookings@hasmmatresidence.com
 NEXT_PUBLIC_SITE_URL=https://www.hasmmat-residence.com
 ```
 
