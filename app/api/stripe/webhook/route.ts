@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { NextResponse } from 'next/server';
+import { verifyAuthoritativePaymentMetadata } from '@/lib/bookingPricing';
 import { prisma } from '@/lib/db';
 import { sendPaidBookingEmails, type PaidBookingDetails } from '@/lib/bookingEmails';
 import { getSmoobuEnv } from '@/lib/env';
@@ -14,6 +15,7 @@ type StripeCheckoutSession = {
   payment_status?: string;
   payment_intent?: string | null;
   amount_total?: number | null;
+  currency?: string | null;
   metadata?: Record<string, string>;
 };
 
@@ -53,6 +55,10 @@ function metadataValue(metadata: Record<string, string>, key: string, fallback =
   return metadata[key] || fallback;
 }
 
+function formatBookingType(value: 'flexible' | 'nonrefundable') {
+  return value === 'nonrefundable' ? 'Non-refundable' : 'Refundable';
+}
+
 function parseGuestName(value: string) {
   const [firstName, ...lastNameParts] = value.trim().split(/\s+/);
   return {
@@ -88,25 +94,44 @@ export async function POST(request: Request) {
 
   const session = event.data.object;
 
-  if (session.payment_status && session.payment_status !== 'paid') {
+  if (session.payment_status !== 'paid') {
     return NextResponse.json({ received: true });
   }
 
   const metadata = session.metadata || {};
+  const { SMOOBU_APARTMENT_ID } = getSmoobuEnv();
   const guestEmail = metadataValue(metadata, 'guestEmail', '');
+  const apartmentId = Number(metadata.apartmentId);
+  let verifiedPayment;
+
+  try {
+    verifiedPayment = verifyAuthoritativePaymentMetadata({
+      metadata,
+      amountTotal: session.amount_total,
+      currency: session.currency,
+      apartmentId,
+      configuredApartmentId: SMOOBU_APARTMENT_ID,
+    });
+  } catch {
+    return NextResponse.json({ error: 'Invalid authoritative booking metadata.' }, { status: 400 });
+  }
 
   if (!guestEmail.includes('@')) {
+    console.error('Stripe booking amount or metadata verification failed', {
+      endpoint: '/api/stripe/webhook',
+      sessionId: session.id,
+    });
     return NextResponse.json({ error: 'Missing guest email metadata.' }, { status: 400 });
   }
 
   const details: PaidBookingDetails = {
-    checkIn: metadataValue(metadata, 'checkIn'),
-    checkOut: metadataValue(metadata, 'checkOut'),
-    guests: metadataValue(metadata, 'guests'),
-    nights: metadataValue(metadata, 'nights'),
-    bookingType: metadataValue(metadata, 'bookingType'),
-    quotedTotal: metadataValue(metadata, 'quotedTotal'),
-    rate: metadataValue(metadata, 'rate'),
+    checkIn: verifiedPayment.input.checkIn,
+    checkOut: verifiedPayment.input.checkOut,
+    guests: `${verifiedPayment.input.guests}`,
+    nights: `${verifiedPayment.nights}`,
+    bookingType: formatBookingType(verifiedPayment.input.bookingType),
+    quotedTotal: `£${(verifiedPayment.amountCents / 100).toFixed(2)}`,
+    rate: verifiedPayment.rate,
     guestName: metadataValue(metadata, 'guestName'),
     guestEmail,
     guestPhone: metadataValue(metadata, 'guestPhone'),
@@ -118,17 +143,16 @@ export async function POST(request: Request) {
   const checkIn = parseDate(details.checkIn);
   const checkOut = parseDate(details.checkOut);
   const guests = Number(details.guests);
-  const nights = Number(details.nights);
+  const nightsFromMetadata = Number(details.nights);
   const totalPaid = session.amount_total || 0;
-  const apartmentId = Number(metadataValue(metadata, 'apartmentId', '0'));
 
   if (
     !checkIn ||
     !checkOut ||
     !Number.isInteger(guests) ||
     guests <= 0 ||
-    !Number.isInteger(nights) ||
-    nights <= 0 ||
+    !Number.isInteger(nightsFromMetadata) ||
+    nightsFromMetadata <= 0 ||
     !Number.isInteger(totalPaid) ||
     totalPaid <= 0 ||
     !Number.isInteger(apartmentId) ||
@@ -139,7 +163,7 @@ export async function POST(request: Request) {
       sessionId: session.id,
       hasValidDates: Boolean(checkIn && checkOut),
       guests,
-      nights,
+      nights: nightsFromMetadata,
       totalPaid,
       apartmentId,
     });
@@ -172,7 +196,7 @@ export async function POST(request: Request) {
           guests,
           totalPaid,
           bookingType: details.bookingType,
-          nights,
+          nights: nightsFromMetadata,
           rate: details.rate,
         },
       });

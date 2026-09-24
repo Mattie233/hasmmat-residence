@@ -98,6 +98,7 @@ export interface PricingBreakdown {
   valid: boolean;
   listingId: string;
   currency: string;
+  amountCents: number;
   nights: number;
   rateTotal: number;
   airbnbTotal: number;

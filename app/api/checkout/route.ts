@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server';
-import type { BookingRequestDetail, GuestBookingDetails } from '@/lib/bookingRequest';
+import type { GuestBookingDetails } from '@/lib/bookingRequest';
+import { getAuthoritativePricing, validateBookingInputs } from '@/lib/bookingPricing';
 import { siteInfo } from '@/lib/data';
 import { getSmoobuEnv } from '@/lib/env';
 
 export const dynamic = 'force-dynamic';
 
-type CheckoutRequest = BookingRequestDetail & GuestBookingDetails;
-
-function formatBookingType(value: string) {
-  return value === 'nonrefundable' ? 'Non-refundable' : 'Refundable';
-}
+type CheckoutRequest = {
+  checkIn?: unknown;
+  checkOut?: unknown;
+  guests?: unknown;
+  bookingType?: unknown;
+} & Partial<GuestBookingDetails>;
 
 function getBaseUrl(request: Request) {
   const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL;
@@ -28,22 +30,8 @@ function metadataText(value: string | undefined, fallback: string) {
 export async function POST(request: Request) {
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-    const { SMOOBU_APARTMENT_ID } = getSmoobuEnv();
+    const { SMOOBU_CUSTOMER_ID, SMOOBU_APARTMENT_ID } = getSmoobuEnv();
     const body = (await request.json()) as CheckoutRequest;
-    const {
-      checkIn,
-      checkOut,
-      guests,
-      nights,
-      bookingType,
-      total,
-      savingsLabel,
-      guestName,
-      guestEmail,
-      guestPhone,
-      guestAddress,
-      specialRequests,
-    } = body;
 
     if (!stripeSecretKey) {
       return NextResponse.json(
@@ -52,16 +40,30 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!checkIn || !checkOut || !guests || !nights || !bookingType || !total || total <= 0) {
-      return NextResponse.json({ error: 'Missing required checkout details.' }, { status: 400 });
+    let input;
+    try {
+      input = validateBookingInputs(body);
+    } catch (error) {
+      return NextResponse.json(
+        { error: error instanceof Error ? error.message : 'Invalid checkout details.' },
+        { status: 400 },
+      );
     }
 
-    if (!guestName?.trim() || !guestEmail?.includes('@') || !guestPhone?.trim()) {
+    const guestName = typeof body.guestName === 'string' ? body.guestName.trim() : '';
+    const guestEmail = typeof body.guestEmail === 'string' ? body.guestEmail.trim() : '';
+    const guestPhone = typeof body.guestPhone === 'string' ? body.guestPhone.trim() : '';
+    const guestAddress = typeof body.guestAddress === 'string' ? body.guestAddress.trim() : '';
+    const specialRequests = typeof body.specialRequests === 'string' ? body.specialRequests.trim() : '';
+
+    if (!guestName || !guestEmail.includes('@') || !guestPhone) {
       return NextResponse.json({ error: 'Missing required guest details.' }, { status: 400 });
     }
 
+    const pricing = await getAuthoritativePricing(input, SMOOBU_CUSTOMER_ID, SMOOBU_APARTMENT_ID);
+    const amount = pricing.amountCents;
+
     const baseUrl = getBaseUrl(request);
-    const amount = Math.round(total * 100);
     const params = new URLSearchParams();
 
     params.set('mode', 'payment');
@@ -76,16 +78,18 @@ export async function POST(request: Request) {
     params.set('line_items[0][price_data][product_data][name]', `${siteInfo.name} direct booking`);
     params.set(
       'line_items[0][price_data][product_data][description]',
-      `${checkIn} to ${checkOut}, ${guests} guest${guests === 1 ? '' : 's'}, ${nights} night${nights === 1 ? '' : 's'}`,
+      `${input.checkIn} to ${input.checkOut}, ${input.guests} guest${input.guests === 1 ? '' : 's'}, ${pricing.nights} night${pricing.nights === 1 ? '' : 's'}`,
     );
-    params.set('payment_intent_data[description]', `${siteInfo.name}: ${checkIn} to ${checkOut}`);
-    params.set('metadata[checkIn]', checkIn);
-    params.set('metadata[checkOut]', checkOut);
-    params.set('metadata[guests]', `${guests}`);
-    params.set('metadata[nights]', `${nights}`);
-    params.set('metadata[bookingType]', formatBookingType(bookingType));
-    params.set('metadata[quotedTotal]', `£${total.toFixed(0)}`);
-    params.set('metadata[rate]', savingsLabel);
+    params.set('payment_intent_data[description]', `${siteInfo.name}: ${input.checkIn} to ${input.checkOut}`);
+    params.set('metadata[checkIn]', input.checkIn);
+    params.set('metadata[checkOut]', input.checkOut);
+    params.set('metadata[guests]', `${input.guests}`);
+    params.set('metadata[nights]', `${pricing.nights}`);
+    params.set('metadata[bookingType]', input.bookingType);
+    params.set('metadata[amountCents]', `${pricing.amountCents}`);
+    params.set('metadata[currency]', pricing.currency);
+    params.set('metadata[quotedTotal]', `£${pricing.totalAfterDiscount.toFixed(2)}`);
+    params.set('metadata[rate]', pricing.savingsLabel);
     params.set('metadata[guestName]', metadataText(guestName, 'Not provided'));
     params.set('metadata[guestEmail]', metadataText(guestEmail, 'Not provided'));
     params.set('metadata[guestPhone]', metadataText(guestPhone, 'Not provided'));

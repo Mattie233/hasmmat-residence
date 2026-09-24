@@ -250,10 +250,7 @@ export function BookingSection() {
           checkIn,
           checkOut,
           guests,
-          nights,
           bookingType,
-          total: pricing.totalAfterDiscount,
-          savingsLabel: pricing.savingsLabel,
           ...guestDetails,
         }),
       });
@@ -473,7 +470,7 @@ export function BookingSection() {
                 <span>Booking confirmation</span>
               </div>
               <p className="mt-4 text-4xl font-semibold">
-                {loading ? 'Loading...' : `£${pricing?.totalAfterDiscount?.toFixed(0) ?? '0'}`}
+                {loading ? 'Loading...' : `£${((pricing?.amountCents ?? 0) / 100).toFixed(2)}`}
               </p>
               <p className="mt-3 text-sm leading-6 text-brand-200">
                 Booking for {guests} guest{guests !== 1 ? 's' : ''} across {nights || '0'} night{nights !== 1 ? 's' : ''}.{' '}
