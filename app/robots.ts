@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://www.hasmmat-residence.com/sitemap.xml',
+    sitemap: 'https://hasmmatresidence.com/sitemap.xml',
   };
 }

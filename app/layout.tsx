@@ -4,7 +4,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Hasmmat Residence | Stylish 4-Bedroom Stay in Leeds',
   description: 'High-quality serviced accommodation in Leeds for families, contractors, groups and football fans near Elland Road.',
-  metadataBase: new URL('https://www.hasmmat-residence.com'),
+  metadataBase: new URL('https://hasmmatresidence.com'),
   icons: {
     icon: '/icon.svg',
     shortcut: '/icon.svg',
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: 'Hasmmat Residence | Stylish 4-Bedroom Stay in Leeds',
     description: 'Book direct for quality family, contractor and group accommodation near Elland Road.',
     type: 'website',
-    url: 'https://www.hasmmat-residence.com',
+    url: 'https://hasmmatresidence.com',
     images: [
       {
         url: '/images/hasmmatres62/PHOTO-2026-04-11-00-10-02_4.jpg',

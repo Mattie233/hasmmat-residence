@@ -1,5 +1,5 @@
 const DEFAULT_SMOOBU_CUSTOMER_ID = 1705732;
-const DEFAULT_SMOOBU_APARTMENT_ID = 3264062;
+export const DEFAULT_SMOOBU_APARTMENT_ID = 3264062;
 
 export function getSmoobuEnv(): {
   SMOOBU_API_KEY: string;

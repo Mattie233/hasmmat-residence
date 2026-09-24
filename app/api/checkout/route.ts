@@ -3,6 +3,7 @@ import type { GuestBookingDetails } from '@/lib/bookingRequest';
 import { getAuthoritativePricing, validateBookingInputs } from '@/lib/bookingPricing';
 import { siteInfo } from '@/lib/data';
 import { getSmoobuEnv } from '@/lib/env';
+import { getCanonicalSiteUrl, getStripeReturnUrls } from '@/lib/siteUrl';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,16 +14,6 @@ type CheckoutRequest = {
   bookingType?: unknown;
 } & Partial<GuestBookingDetails>;
 
-function getBaseUrl(request: Request) {
-  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL;
-  if (configuredUrl) return configuredUrl.replace(/\/$/, '');
-
-  const origin = request.headers.get('origin');
-  if (origin) return origin;
-
-  return 'http://localhost:3000';
-}
-
 function metadataText(value: string | undefined, fallback: string) {
   return (value?.trim() || fallback).slice(0, 500);
 }
@@ -31,6 +22,8 @@ export async function POST(request: Request) {
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     const { SMOOBU_CUSTOMER_ID, SMOOBU_APARTMENT_ID } = getSmoobuEnv();
+    const siteUrl = getCanonicalSiteUrl();
+    const { successUrl, cancelUrl } = getStripeReturnUrls(siteUrl);
     const body = (await request.json()) as CheckoutRequest;
 
     if (!stripeSecretKey) {
@@ -63,15 +56,14 @@ export async function POST(request: Request) {
     const pricing = await getAuthoritativePricing(input, SMOOBU_CUSTOMER_ID, SMOOBU_APARTMENT_ID);
     const amount = pricing.amountCents;
 
-    const baseUrl = getBaseUrl(request);
     const params = new URLSearchParams();
 
     params.set('mode', 'payment');
     params.set('billing_address_collection', 'required');
     params.set('phone_number_collection[enabled]', 'true');
     params.set('payment_method_options[card][request_three_d_secure]', 'automatic');
-    params.set('success_url', `${baseUrl}/?payment=success#booking`);
-    params.set('cancel_url', `${baseUrl}/?payment=cancelled#booking`);
+    params.set('success_url', successUrl);
+    params.set('cancel_url', cancelUrl);
     params.set('line_items[0][quantity]', '1');
     params.set('line_items[0][price_data][currency]', 'gbp');
     params.set('line_items[0][price_data][unit_amount]', `${amount}`);

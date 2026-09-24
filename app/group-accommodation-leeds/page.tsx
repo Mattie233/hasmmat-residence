@@ -75,13 +75,13 @@ export const metadata: Metadata = {
   description:
     'Spacious 4-bedroom group accommodation in Leeds for up to 8 guests, with free parking, fast Wi-Fi, kitchen and convenient access to Elland Road and Leeds city centre.',
   alternates: {
-    canonical: 'https://www.hasmmat-residence.com/group-accommodation-leeds'
+    canonical: 'https://hasmmatresidence.com/group-accommodation-leeds'
   },
   openGraph: {
     title: 'Group Accommodation Leeds | Sleeps Up to 8 | Hasmmat Residence',
     description:
       'Spacious 4-bedroom group accommodation in Leeds for up to 8 guests, with free parking, fast Wi-Fi, kitchen and convenient access to Elland Road and Leeds city centre.',
-    url: 'https://www.hasmmat-residence.com/group-accommodation-leeds',
+    url: 'https://hasmmatresidence.com/group-accommodation-leeds',
     siteName: 'Hasmmat Residence',
     type: 'website',
     images: [

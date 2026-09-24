@@ -1,7 +1,5 @@
-import type { BookingType } from '@/types';
-import { siteInfo } from '@/lib/data';
+import { cancellationPolicy, getFormattedPropertyAddress, siteInfo } from '@/lib/data';
 import { sendEmail } from '@/lib/email';
-import type { BookingConfirmationRequest } from '@/lib/bookingRequest';
 
 export type PaidBookingDetails = {
   checkIn: string;
@@ -19,10 +17,6 @@ export type PaidBookingDetails = {
   paymentId: string;
 };
 
-export type BookingConfirmationDetails = BookingConfirmationRequest & {
-  submittedAt: string;
-};
-
 export type DirectEnquiryDetails = {
   name: string;
   email: string;
@@ -32,10 +26,6 @@ export type DirectEnquiryDetails = {
   message: string;
   submittedAt: string;
 };
-
-export function formatBookingType(value: BookingType | string) {
-  return value === 'nonrefundable' ? 'Non-refundable' : value === 'flexible' ? 'Refundable' : value;
-}
 
 function escapeHtml(value: string) {
   return value
@@ -145,76 +135,6 @@ function formatSubmittedAt(value: string) {
   }).format(new Date(value));
 }
 
-export async function sendBookingConfirmationEmails(details: BookingConfirmationDetails) {
-  const hostEmail = siteInfo.email;
-  const total = `£${details.total.toFixed(0)}`;
-  const bookingRows: Array<[string, string]> = [
-    ['Guest name', details.guestName],
-    ['Property booked', details.propertyName],
-    ['Check-in date', details.checkIn],
-    ['Check-out date', details.checkOut],
-    ['Number of guests', `${details.guests}`],
-    ['Total booking price', total],
-    ['Booking summary', `${details.nights} night${details.nights === 1 ? '' : 's'} · ${formatBookingType(details.bookingType)} · ${details.savingsLabel}`],
-  ];
-  const hostRows: Array<[string, string]> = [
-    ['Guest name', details.guestName],
-    ['Guest email address', details.guestEmail],
-    ['Guest phone number', details.guestPhone],
-    ['Property booked', details.propertyName],
-    ['Check-in date', details.checkIn],
-    ['Check-out date', details.checkOut],
-    ['Number of guests', `${details.guests}`],
-    ['Total booking price', total],
-    ['Special requests', details.specialRequests || 'None'],
-    ['Submitted', formatSubmittedAt(details.submittedAt)],
-  ];
-
-  const guestText = [
-    `Hi ${details.guestName},`,
-    '',
-    `Thank you for choosing ${siteInfo.name}. Your booking details are below.`,
-    '',
-    textRows(bookingRows),
-    '',
-    'If any detail is incorrect, please contact us as soon as possible.',
-    '',
-    `${siteInfo.name}`,
-    siteInfo.email,
-    siteInfo.phone,
-  ].join('\n');
-  const hostText = ['New booking received.', '', textRows(hostRows)].join('\n');
-
-  await Promise.all([
-    sendEmail({
-      to: details.guestEmail,
-      subject: 'Booking Confirmation – Hasmmat Residence',
-      html: brandedEmailShell({
-        eyebrow: 'Booking confirmation',
-        heading: 'Your booking is confirmed',
-        body: `Thank you for choosing ${siteInfo.name}. We have received your booking and the summary is below.`,
-        detailRows: bookingRows,
-        footerNote: 'If you do not recognise this booking or need to change anything, please contact Hasmmat Residence directly.',
-      }),
-      text: guestText,
-      replyTo: hostEmail,
-    }),
-    sendEmail({
-      to: hostEmail,
-      subject: `New Booking Received – ${details.guestName}`,
-      html: brandedEmailShell({
-        eyebrow: 'Host notification',
-        heading: 'New booking received',
-        body: 'A guest has submitted a booking through the Hasmmat Residence website. The details are below.',
-        detailRows: hostRows,
-        footerNote: 'Follow up with the guest if any verification, deposit, or arrival details are required.',
-      }),
-      text: hostText,
-      replyTo: details.guestEmail,
-    }),
-  ]);
-}
-
 export async function sendEnquiryEmails(details: DirectEnquiryDetails) {
   const hostEmail = process.env.BOOKING_NOTIFICATION_EMAIL;
 
@@ -284,17 +204,28 @@ export async function sendEnquiryEmails(details: DirectEnquiryDetails) {
 
 export async function sendPaidBookingEmails(details: PaidBookingDetails) {
   const ownerEmail = process.env.BOOKING_NOTIFICATION_EMAIL || siteInfo.email;
+  const policyTitle = details.bookingType.toLowerCase().includes('non-refundable')
+    ? 'Non-refundable bookings'
+    : 'Refundable bookings';
+  const policy = cancellationPolicy.find((item) => item.title === policyTitle);
+  const cancellationTerms = policy
+    ? `${policy.title}: ${policy.points.join('; ')}.`
+    : 'Please contact Hasmmat Residence for the cancellation terms that apply to this booking.';
   const bookingRows: Array<[string, string]> = [
-    ['Check-in', details.checkIn],
-    ['Check-out', details.checkOut],
+    ['Lead guest', details.guestName],
+    ['Check-in date', details.checkIn],
+    ['Check-in time', '3:00 PM'],
+    ['Check-out date', details.checkOut],
+    ['Check-out time', '10:00 AM'],
     ['Guests', details.guests],
     ['Nights', details.nights],
     ['Booking type', details.bookingType],
     ['Total paid', details.quotedTotal],
     ['Rate', details.rate],
+    ['Property address', getFormattedPropertyAddress()],
+    ['Cancellation terms', cancellationTerms],
   ];
   const guestRows: Array<[string, string]> = [
-    ['Lead guest', details.guestName],
     ['Email', details.guestEmail],
     ['Phone', details.guestPhone],
     ['Address', details.guestAddress],
@@ -305,11 +236,11 @@ export async function sendPaidBookingEmails(details: PaidBookingDetails) {
   const guestText = [
     `Hi ${details.guestName},`,
     '',
-    `Your booking request for ${siteInfo.name} has been received and paid.`,
+    `Thank you for booking directly with ${siteInfo.name}. Your payment has been successfully received and your reservation has been created.`,
     '',
     textRows(bookingRows),
     '',
-    'We will review the guest details and send final check-in instructions after verification.',
+    'This is your paid direct-booking confirmation. We will send final access instructions before check-in.',
     '',
     `${siteInfo.name}`,
     siteInfo.email,
@@ -341,10 +272,10 @@ export async function sendPaidBookingEmails(details: PaidBookingDetails) {
   await Promise.all([
     sendEmail({
       to: details.guestEmail,
-      subject: `Booking received for ${siteInfo.name}`,
+      subject: `Payment received – ${siteInfo.name} booking`,
       html: emailShell(
-        'Your booking has been received',
-        'Thanks for booking direct. Your payment has been received and the stay details are below.',
+        `Payment received – booking confirmed for ${details.guestName}`,
+        `Thank you for booking directly with ${siteInfo.name}. Your payment has been successfully received and your reservation has been created. This is a paid direct booking, not an enquiry.`,
         bookingRows,
       ),
       text: guestText,

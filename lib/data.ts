@@ -9,6 +9,13 @@ export const siteInfo = {
   bookingNotice: 'Secure your comfortable stay with direct booking discounts and fast check-out.',
   email: 'bookings@hasmmatresidence.com',
   phone: '+44 7983818344',
+  address: {
+    streetAddress: '62 Cross Flatts Grove',
+    addressLocality: 'Leeds',
+    addressRegion: 'West Yorkshire',
+    postalCode: 'LS11',
+    addressCountry: 'GB',
+  },
   whatsappUrl: 'https://wa.me/447983818344',
   instagramUrl: 'https://www.instagram.com/',
   tiktokUrl: 'https://www.tiktok.com/',
@@ -19,6 +26,11 @@ export const siteInfo = {
     'Family-friendly and contractor-ready'
   ]
 };
+
+export function getFormattedPropertyAddress() {
+  const { streetAddress, addressLocality, addressRegion, postalCode } = siteInfo.address;
+  return [streetAddress, addressLocality, addressRegion, postalCode].join(', ');
+}
 
 export const heroSlides = [
   {

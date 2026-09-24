@@ -58,13 +58,13 @@ export const metadata: Metadata = {
   description:
     'Stay close to Elland Road in a spacious 4-bedroom Leeds property sleeping up to 8 guests, with free parking, fast Wi-Fi and easy access to the city centre.',
   alternates: {
-    canonical: 'https://www.hasmmat-residence.com/accommodation-near-elland-road'
+    canonical: 'https://hasmmatresidence.com/accommodation-near-elland-road'
   },
   openGraph: {
     title: 'Accommodation Near Elland Road | Hasmmat Residence Leeds',
     description:
       'Stay close to Elland Road in a spacious 4-bedroom Leeds property sleeping up to 8 guests, with free parking, fast Wi-Fi and easy access to the city centre.',
-    url: 'https://www.hasmmat-residence.com/accommodation-near-elland-road',
+    url: 'https://hasmmatresidence.com/accommodation-near-elland-road',
     siteName: 'Hasmmat Residence',
     type: 'website',
     images: [

@@ -82,13 +82,13 @@ export const metadata: Metadata = {
   description:
     '4-bedroom contractor accommodation in Leeds for teams of up to 8. Free parking, fast Wi-Fi, kitchen and workspaces. Direct and long-stay bookings available.',
   alternates: {
-    canonical: 'https://www.hasmmat-residence.com/contractor-accommodation-leeds'
+    canonical: 'https://hasmmatresidence.com/contractor-accommodation-leeds'
   },
   openGraph: {
     title: 'Contractor Accommodation Leeds | Hasmmat Residence',
     description:
       '4-bedroom contractor accommodation in Leeds for teams of up to 8. Free parking, fast Wi-Fi, kitchen and workspaces. Direct and long-stay bookings available.',
-    url: 'https://www.hasmmat-residence.com/contractor-accommodation-leeds',
+    url: 'https://hasmmatresidence.com/contractor-accommodation-leeds',
     siteName: 'Hasmmat Residence',
     type: 'website',
     images: [

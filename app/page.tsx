@@ -15,17 +15,13 @@ const structuredData = {
   '@type': 'LodgingBusiness',
   name: siteInfo.name,
   description: siteInfo.shortDescription,
-  image: 'https://www.hasmmat-residence.com/images/hasmmatres62/PHOTO-2026-04-11-00-10-02_4.jpg',
+  image: 'https://hasmmatresidence.com/images/hasmmatres62/PHOTO-2026-04-11-00-10-02_4.jpg',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: '62 Cross Flatts Grove',
-    addressLocality: 'Leeds',
-    addressRegion: 'West Yorkshire',
-    postalCode: 'LS11',
-    addressCountry: 'GB'
+    ...siteInfo.address
   },
   telephone: siteInfo.phone,
-  url: 'https://www.hasmmat-residence.com',
+  url: 'https://hasmmatresidence.com',
   priceRange: '£220+',
   aggregateRating: {
     '@type': 'AggregateRating',
