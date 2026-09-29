@@ -200,7 +200,7 @@ export function ContactSection() {
               className="rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-white outline-none focus:border-brand-300"
               placeholder="Check-in and check-out dates"
             />
-            <label className="text-sm uppercase tracking-[0.18em] text-brand-300">Message</label>
+            <label className="text-sm uppercase tracking-[0.18em] text-brand-300">Message (optional)</label>
             <textarea
               value={message}
               onChange={(event) => setMessage(event.target.value)}

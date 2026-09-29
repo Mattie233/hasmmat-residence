@@ -147,7 +147,6 @@ export async function sendEnquiryEmails(details: DirectEnquiryDetails) {
     ['Guest name', details.name],
     ['Preferred dates', details.dates],
     ['Number of guests', details.guests],
-    ['Enquiry message', details.message],
   ];
   const hostRows: Array<[string, string]> = [
     ['Guest name', details.name],
@@ -155,9 +154,13 @@ export async function sendEnquiryEmails(details: DirectEnquiryDetails) {
     ['Guest phone', details.phone],
     ['Guests', details.guests],
     ['Preferred dates', details.dates],
-    ['Full enquiry message', details.message],
     ['Submitted', submittedAt],
   ];
+
+  if (details.message) {
+    guestRows.push(['Enquiry message', details.message]);
+    hostRows.splice(-1, 0, ['Full enquiry message', details.message]);
+  }
 
   const guestText = [
     `Hi ${details.name},`,

@@ -7,7 +7,9 @@ const REQUIRED_ERROR = 'Please complete all required enquiry details before send
 const SEND_ERROR =
   'Sorry, we could not send your enquiry right now. Please try again later or contact Hasmmat Residence directly.';
 
-type DirectEnquiryRequest = Omit<DirectEnquiryDetails, 'submittedAt'>;
+type DirectEnquiryRequest = Omit<DirectEnquiryDetails, 'submittedAt' | 'message'> & {
+  message?: string;
+};
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -21,8 +23,6 @@ function getMissingFields(body: DirectEnquiryRequest) {
   if (!body.phone?.trim()) missing.push('phone');
   if (!body.guests?.trim()) missing.push('guests');
   if (!body.dates?.trim()) missing.push('dates');
-  if (!body.message?.trim()) missing.push('message');
-
   return missing;
 }
 
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       phone: body.phone.trim(),
       guests: body.guests.trim(),
       dates: body.dates.trim(),
-      message: body.message.trim(),
+      message: body.message?.trim() || '',
       submittedAt: new Date().toISOString(),
     });
 
